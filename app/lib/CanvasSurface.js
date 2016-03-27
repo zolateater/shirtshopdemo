@@ -15,6 +15,7 @@ function CanvasSurface(canvas)
     this.factory = new CanvasUIFactory(this.context);
 }
 
+
 CanvasSurface.prototype.render = function () {
     var label = this.factory.createLabel();
     label.render();

@@ -24,7 +24,7 @@ function UIElement(position, size)
  * @param {UIElementView} view
  */
 UIElement.prototype.setView = function(view) {
-    if (!view instanceof UIElementView) {
+    if ( ! (view instanceof UIElementView) ) {
         throw new TypeError('View must have UIElementView type!');
     }
     this.view = view;

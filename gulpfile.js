@@ -31,9 +31,31 @@ gulp.task('build', function () {
     }));
 });
 
+gulp.task('build-tests', function() {
+    return multiPipe(
+        gulp.src('tests/**/*.js'),
+        sourceMaps.init(),
+        gulpConcat('tests.js'),
+        gulpIf(isDevelopment, sourceMaps.write()),
+        gulpIf(!isDevelopment, gulpUglify()),
+        gulp.dest('public/js'),
+        browserSync.stream()
+    ).on('error', gulpNotify.onError(function(error){
+        return {
+            title: 'Tests compile error!',
+            message: error.message
+        };
+    }));
+});
+
 // watcher for app
 gulp.task('watch-app', function() {
     gulp.watch('app/**/*.js', gulp.series('build'));
+});
+
+// watcher for tests
+gulp.task('watch-tests', function() {
+    gulp.watch('tests/**/*.js', gulp.series('build-tests'));
 });
 
 // live reload
@@ -48,4 +70,4 @@ gulp.task('live-reload', function() {
 
 
 // for development
-gulp.task('dev', gulp.series('build', gulp.parallel('watch-app', 'live-reload')));
+gulp.task('dev', gulp.series('build', gulp.parallel('watch-app', 'watch-tests', 'live-reload')));

@@ -10,8 +10,9 @@
 function UILabelElement(position, size, text, style) {
     UIElement.apply(this, [position, size]);
 
-    console.log('This is "this":');
-    console.log(this);
+    if (!text) {
+        text = UILabelElement.defaultText;
+    }
 
     this.text = text;
     this.style = style;
@@ -36,3 +37,5 @@ UILabelElement.prototype.getText = function () {
 UILabelElement.prototype.setText = function (text) {
     this.text = text;
 };
+
+UILabelElement.defaultText = "Введите текст...";
