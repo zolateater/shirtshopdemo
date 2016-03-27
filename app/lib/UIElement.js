@@ -7,23 +7,23 @@
  */
 function UIElement(position, size)
 {
-    if (!position instanceof Position) {
+    if ( ! (position instanceof Position) ) {
         position = new Position();
     }
     this.position = position;
 
-    if (!size instanceof Position) {
+    if ( ! (size instanceof Position)) {
         size = new Size();
     }
     this.size = size;
 }
 
 /**
- * Sets the view of an element
+ * Sets the view of the element
  *
  * @param {UIElementView} view
  */
-UIElement.setView = function(view) {
+UIElement.prototype.setView = function(view) {
     if (!view instanceof UIElementView) {
         throw new TypeError('View must have UIElementView type!');
     }
@@ -31,12 +31,23 @@ UIElement.setView = function(view) {
 };
 
 /**
+ * Returns current view of the element
+ *
+ * @returns {UIElementView|undefined}
+ */
+UIElement.prototype.getView = function () {
+    return this.view;
+};
+
+/**
  * Renders the element using its view
  */
-UIElement.render = function () {
+UIElement.prototype.render = function () {
     if (!this.view) {
         throw new ReferenceError('View is not set!');
     }
+
+    this.view.render(this);
 };
 
 /**
@@ -70,7 +81,7 @@ UIElement.prototype.setSize = function(size) {
 
 
 /**
- *
+ * Return the size of the element
  *
  * @returns {Size}
  */

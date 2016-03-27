@@ -14,7 +14,7 @@ const isDevelopment = true;
 gulp.task('build', function () {
     return multiPipe(
         gulp.src([
-            'app/**/*.js',
+            'app/lib/*.js',
             'app/index.js'
         ]),
         sourceMaps.init(),

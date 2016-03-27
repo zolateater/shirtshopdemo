@@ -8,11 +8,16 @@
  * @constructor
  */
 function UILabelElement(position, size, text, style) {
-    UIElement.call(this, position, size);
+    UIElement.apply(this, [position, size]);
+
+    console.log('This is "this":');
+    console.log(this);
 
     this.text = text;
     this.style = style;
 }
+
+UILabelElement.prototype = Object.create(UIElement.prototype);
 
 /**
  * Gets a text of the current UILabelElement

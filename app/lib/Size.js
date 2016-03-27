@@ -19,6 +19,7 @@ Size.prototype.getHeight = function() {
 };
 
 /**
+ * Increases the size by multiplier
  *
  * @param {number} multiplier
  * @returns {Size}
