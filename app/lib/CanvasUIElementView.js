@@ -7,6 +7,10 @@ function CanvasUIElementView(context) {
     if (!context instanceof CanvasRenderingContext2D) {
         throw new TypeError('Canvas UI Element View error! Context is not a context');
     }
+
+    /**
+     * @type {CanvasRenderingContext2D}
+     */
     this.context = context;
 }
 

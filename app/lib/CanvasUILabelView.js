@@ -9,6 +9,21 @@ function CanvasUILabelView(context) {
 
 CanvasUILabelView.prototype = Object.create(CanvasUIElementView.prototype);
 
-CanvasUILabelView.prototype.render = function () {
+/**
+ *
+ * @param {UIElement} element
+ */
+CanvasUILabelView.prototype.render = function (element) {
+    var fontSize = element.getSize().getHeight();
 
+    this.context.font = fontSize + "px Arial";
+    this.context.fillStyle = "#000000";
+    this.context.textBaseline = 'hanging';
+
+    this.context.fillText(
+        element.getText(),
+        element.getPosition().getX(),
+        element.getPosition().getY(),
+        element.getSize().getWidth()
+    );
 };

@@ -7,8 +7,16 @@
  * @constructor
  */
 function UICollection() {
+    var self = this;
+
     this.elements = [];
     this.selectedIndex = -1;
+
+    Object.defineProperty(this, 'length', {
+        get: function() {
+            return self.elements.length
+        }
+    })
 }
 
 /**
@@ -16,7 +24,7 @@ function UICollection() {
  *
  * @param {UIElement} element
  */
-UICollection.prototype.push = function(element) {
+UICollection.prototype.add = function(element) {
     if ( ! (element instanceof UIElement) ) {
         throw new TypeError('Element in UICollection must have UIElement type');
     }
@@ -34,10 +42,44 @@ UICollection.prototype.getAll = function() {
 };
 
 /**
- * Removes element with passed index from the collection
+ * Removes element with passed index from the collection and returns it
+ *
+ * @return {UIElement}
  */
 UICollection.prototype.remove = function (index) {
+    if (!this.has(index)) {
+        throw new RangeError("Collection: index out of bounds!");
+    }
+    if (index == this.selectedIndex) {
+        this.deselect();
+    }
+    return this.elements.splice(index, 1)[0];
+};
 
+/**
+ * Swaps places of two elements in the collection
+ *
+ * @param index1
+ * @param index2
+ */
+UICollection.prototype.swap = function (index1, index2) {
+    if (!this.has(index1) || !this.has(index2)) {
+        throw new RangeError("Collection: index out of bounds!");
+    }
+
+    var temp = this.elements[index1];
+    this.elements[index1]  = this.elements[index2];
+    this.elements[index2] = temp;
+};
+
+/**
+ * Check if index exists in collection
+ *
+ * @param index
+ * @returns {boolean}
+ */
+UICollection.prototype.has = function (index) {
+    return index >= 0 || index < this.length;
 };
 
 /**
@@ -45,6 +87,9 @@ UICollection.prototype.remove = function (index) {
  * @param index
  */
 UICollection.prototype.get = function (index) {
+    if (!this.has(index)) {
+        throw new RangeError("Collection: index out of bounds!");
+    }
     return this.elements[index];
 };
 
@@ -60,5 +105,30 @@ UICollection.prototype.deselect = function () {
  * @param index
  */
 UICollection.prototype.select = function (index) {
+    if (!this.has(index)) {
+        throw new RangeError("Collection: index out of bounds!");
+    }
     this.selectedIndex = index;
+};
+
+/**
+ * Returns selected element
+ *
+ * @returns {UIElement|null}
+ */
+UICollection.prototype.getSelectedElement = function () {
+    if (this.selectedIndex != -1) {
+        return this.elements[this.selectedIndex]
+    }
+    return null;
+};
+
+/**
+ * Returns index of selected element
+ * If none, returns -1
+ *
+ * @returns {number}
+ */
+UICollection.prototype.getSelectedIndex = function () {
+    return this.selectedIndex;
 };

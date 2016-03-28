@@ -32,10 +32,10 @@ Size.prototype.multiply = function(multiplier) {
  * const for default width
  * @type {number}
  */
-Size.defaultWidth = 10;
+Size.defaultWidth = 50;
 
 /**
  * const for default height
  * @type {number}
  */
-Size.defaultHeight = 10;
+Size.defaultHeight = 50;
