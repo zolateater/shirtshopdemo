@@ -16,6 +16,8 @@ function CanvasSurface(canvas)
     this.elements = new UICollection();
     this.elements.add(this.factory.createLabel());
     this.elements.select(0);
+
+
 }
 
 /**

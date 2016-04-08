@@ -88,3 +88,26 @@ UIElement.prototype.setSize = function(size) {
 UIElement.prototype.getSize = function () {
     return this.size;
 };
+
+
+/**
+ * Returns true if passed offset matches element position
+ *
+ * @param clientX
+ * @param clientY
+ * @returns {boolean}
+ */
+UIElement.prototype.isOffsetIn = function (clientX, clientY)
+{
+    var currentPosition = this.getPosition();
+    var currentSize = this.getSize();
+
+    if (currentPosition.getX() > clientX || currentPosition.getX() + currentSize.getWidth() < clientX) {
+        return false;
+    }
+    if (currentPosition.getY() > clientY || currentPosition.getY() + currentSize.getHeight() < clientY) {
+        return false;
+    }
+
+    return true;
+};

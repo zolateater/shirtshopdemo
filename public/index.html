@@ -6,14 +6,24 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <meta charset="UTF-8">
     <title>Page</title>
+    <style>
+        #canvas {
+            border: solid 1px dimgrey;
+        }
+        #canvas.movable {
+            cursor: move;
+        }
+        #canvas.resizable {
+            cursor: ew-resize;
+        }
+    </style>
 </head>
 <body>
-
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <canvas id="canvas">
-                    Sorry, your browser sucks. What year are you from? Even my cat supports the canvas element.
+                <canvas id="canvas" width="800" height="600">
+                    Sorry, your browser sucks. What year are you from? Even my cat supports canvas.
                 </canvas>
             </div>
         </div>

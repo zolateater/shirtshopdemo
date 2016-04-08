@@ -132,3 +132,20 @@ UICollection.prototype.getSelectedElement = function () {
 UICollection.prototype.getSelectedIndex = function () {
     return this.selectedIndex;
 };
+
+/**
+ * Fetches element by passed offset
+ *
+ * @param offsetX
+ * @param offsetY
+ * @returns {UIElement|null}
+ */
+UICollection.prototype.fetchElementByOffset = function (offsetX, offsetY) {
+    var matchedElement = null;
+    this.elements.forEach(function (el) {
+        if (el.isOffsetIn(offsetX, offsetY)) {
+            matchedElement = el;
+        }
+    });
+    return matchedElement;
+};

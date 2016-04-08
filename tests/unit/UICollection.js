@@ -104,6 +104,17 @@ describe('UICollection', function() {
         assert(collection.getSelectedIndex() == 0);
         collection.remove(0);
         assert(collection.getSelectedElement() == null);
-    })
+    });
+
+    it("fetch element by position", function () {
+        var collection = new UICollection();
+        var el1 = new UILabelElement(new Position(10, 10), new Size(10, 10), "text 0");
+        var el2 = new UILabelElement(new Position(15, 15), new Size(10, 10), "text 1");
+        collection.add(el1);
+        collection.add(el2);
+        assert(collection.fetchElementByOffset(15, 15).getText() == "text 1");
+        assert(collection.fetchElementByOffset(14, 14).getText() == "text 0");
+        assert(collection.fetchElementByOffset(0, 0) == null);
+    });
 
 });

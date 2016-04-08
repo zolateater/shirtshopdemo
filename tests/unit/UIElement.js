@@ -37,4 +37,13 @@ describe('UIElement', function() {
         element.setSize(newSize);
         assert(element.getSize().getWidth() == 1);
     });
+
+    it("knows that offset matches/doesn't matches its position and size", function() {
+        var element = new UIElement();
+        element.moveTo(new Position(0, 0));
+        element.setSize(new Size(10, 10));
+        assert(element.isOffsetIn(5, 5) == true);
+        element.moveTo(new Position(10, 10));
+        assert(element.isOffsetIn(5, 5) == false);
+    });
 });
