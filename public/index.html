@@ -6,17 +6,28 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <meta charset="UTF-8">
     <title>Page</title>
+    <style>
+        #elementsCanvas {
+            border: 1px solid #00ffaa;
+        }
+        #webglCanvas {
+            border: 1px solid #FF00aa;
+        }
+    </style>
 </head>
 <body>
 
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <canvas id="canvas">
+                <canvas id="elementsCanvas">
                     Sorry, your browser sucks. What year are you from? Even my cat supports the canvas element.
                 </canvas>
             </div>
         </div>
+        <canvas id="webglCanvas">
+            Sorry, your browser sucks. What year are you from? Even my cat supports the canvas element.
+        </canvas>
     </div>
     <script src="/js/app.js"></script>
 </body>

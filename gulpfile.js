@@ -61,7 +61,6 @@ gulp.task('watch-tests', function() {
 // live reload
 gulp.task('live-reload', function() {
     browserSync.init({
-        // TODO: add proxy using apache
         server: "./public"
     });
 
