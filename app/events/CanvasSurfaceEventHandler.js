@@ -44,7 +44,7 @@ CanvasSurfaceEventHandler.prototype.handleMouseDown = function (e) {
         return;
     }
 
-    // We remember here last click offset relatively selected element
+    // We remember here the last click offset relatively selected element
     this.lastClickOffset = newSelectedElement.getClickOffset(localCoordinates.x, localCoordinates.y);
 
     // Is it a click starting resize operation ?

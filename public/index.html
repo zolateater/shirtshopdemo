@@ -8,7 +8,9 @@
     <title>Page</title>
     <style>
         #canvas {
-            border: solid 1px dimgrey;
+            position: relative;
+            display: inline;
+            border: solid 1px rgba(0,0,0,.08);
         }
         #canvas.movable {
             cursor: move;
@@ -16,15 +18,43 @@
         #canvas.resizable {
             cursor: nwse-resize;
         }
+        .page-header {
+            background: #6f5499;
+            color: white;
+        }
+        .page-header small {
+            color: #cdbfe3;
+        }
+        .canvas-container {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Накидай текста!</h1>
+                    <h4>
+                        <small>Будет круто! Будет просто класс! Супер круто!</small>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
+
         <div class="row">
             <div class="col-md-12">
-                <canvas id="canvas" width="800" height="600">
-                    Sorry, your browser sucks. What year are you from? Even my cat supports canvas.
-                </canvas>
+                <div class="jumbotron">
+                    <div class="container canvas-container">
+                        <h2>Рисуй текстуру! Будет круто!</h2>
+                        <canvas id="canvas" width="800" height="600">
+                            Sorry, your browser sucks. What year are you from? Even my cat supports canvas.
+                        </canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
