@@ -46,3 +46,17 @@ CanvasSurface.prototype.render = function () {
     this.clear();
     this.renderElements();
 };
+
+/**
+ * Get canvas bound rectangle
+ *
+ * @returns {{top: number, right: number, bottom: number, left: number}}
+ */
+CanvasSurface.prototype.getBounds = function () {
+    return {
+        top: 0,
+        right: this.canvas.width,
+        bottom: this.canvas.height,
+        left: 0
+    };
+};
