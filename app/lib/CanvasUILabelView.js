@@ -16,6 +16,9 @@ CanvasUILabelView.prototype = Object.create(CanvasUIElementView.prototype);
 CanvasUILabelView.prototype.render = function (element) {
     var fontSize = element.getSize().getHeight();
 
+    // TODO: color styles
+
+
     this.context.font = fontSize + "px Arial";
     this.context.fillStyle = "#000000";
     this.context.textBaseline = 'hanging';

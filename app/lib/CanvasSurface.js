@@ -15,9 +15,7 @@ function CanvasSurface(canvas)
     this.factory = new CanvasUIFactory(this.context);
     this.elements = new UICollection();
     this.elements.add(this.factory.createLabel());
-    this.elements.select(0);
-
-
+    new CanvasSurfaceEventHandler(this).bindAll();
 }
 
 /**

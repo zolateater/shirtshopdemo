@@ -6,7 +6,7 @@
  */
 function CanvasUISelectedView(context) {
     if (!context instanceof CanvasRenderingContext2D) {
-        throw new TypeError('Canvas UI Element View error! Context is not a context');
+        throw new TypeError('Canvas UI Element View error! Context does not have type CanvasRenderingContext2D!');
     }
 
     /**
@@ -18,7 +18,21 @@ function CanvasUISelectedView(context) {
 CanvasUISelectedView.prototype = Object.create(CanvasUIElementView.prototype);
 
 CanvasUISelectedView.prototype.render = function (element) {
-    this.context.strokeStyle = "#AAAAFF";
+
+    var iconResizeWidth = 15;
+    this.context.font = iconResizeWidth + "px Arial";
+    this.context.fillStyle = "#2e6da4";
+    this.context.textBaseline = 'bottom';
+
+    this.context.fillText(
+        '\u21f2',
+        element.getPosition().getX() + element.getSize().getWidth() - iconResizeWidth + 2,
+        element.getPosition().getY() + element.getSize().getHeight(),
+        iconResizeWidth
+    );
+
+    //this.⇘
+    this.context.strokeStyle = "#2e6da4";
     this.context.strokeRect(
         element.getPosition().getX(),
         element.getPosition().getY(),

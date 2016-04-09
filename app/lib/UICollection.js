@@ -149,3 +149,20 @@ UICollection.prototype.fetchElementByOffset = function (offsetX, offsetY) {
     });
     return matchedElement;
 };
+
+/**
+ * Fetches index by passed offset
+ *
+ * @param offsetX
+ * @param offsetY
+ * @returns {*}
+ */
+UICollection.prototype.fetchIndexByOffset = function (offsetX, offsetY) {
+    var matchedIndex = null;
+    this.elements.forEach(function (el, index) {
+        if (el.isOffsetIn(offsetX, offsetY)) {
+            matchedIndex = index;
+        }
+    });
+    return matchedIndex;
+};

@@ -15,6 +15,7 @@ gulp.task('build', function () {
     return multiPipe(
         gulp.src([
             'app/lib/*.js',
+            'app/events/*.js',
             'app/index.js'
         ]),
         sourceMaps.init(),

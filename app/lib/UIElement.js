@@ -111,3 +111,18 @@ UIElement.prototype.isOffsetIn = function (clientX, clientY)
 
     return true;
 };
+
+/**
+ * Returns object containing information about how far is passed offset from point (0, 0)
+ *
+ * @param clientX
+ * @param clientY
+ * @returns {{top: number, left: number}}
+ */
+UIElement.prototype.getClickOffset = function (clientX, clientY) {
+    var position = this.getPosition();
+    return {
+        top: clientX - position.getX(),
+        left: clientY - position.getY()
+    }
+};

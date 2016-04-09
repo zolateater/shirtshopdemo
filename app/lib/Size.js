@@ -18,6 +18,20 @@ Size.prototype.getHeight = function() {
     return this.height;
 };
 
+
+Size.prototype.resizeBy = function (deltaWidth, deltaHeight) {
+    this.width += deltaWidth;
+    this.height += deltaHeight;
+
+    if (this.width < Size.minWidth) {
+        this.width = Size.minWidth;
+    }
+
+    if (this.height < Size.minHeight) {
+        this.height = Size.minHeight;
+    }
+};
+
 /**
  * Increases the size by multiplier
  *
@@ -27,6 +41,18 @@ Size.prototype.getHeight = function() {
 Size.prototype.multiply = function(multiplier) {
     return new Size(this.width * multiplier, this.height * multiplier);
 };
+
+/**
+ * Minimal width
+ * @type {number}
+ */
+Size.minWidth = 40;
+
+/**
+ * Minimal height
+ * @type {number}
+ */
+Size.minHeight = 40;
 
 /**
  * const for default width
