@@ -29,6 +29,11 @@ CanvasSurfaceEventHandler.prototype.bindAll = function (e) {
 CanvasSurfaceEventHandler.prototype.handleMouseDown = function (e) {
     this.isMouseDown = true;
 
+    // Quick hack
+    if (e instanceof TouchEvent) {
+        e = e.touches[0];
+    }
+
     var localCoordinates = this.toLocalCoordinates(e.clientX, e.clientY);
     var oldSelectedElement = this.surface.elements.selectedIndex;
     var newSelectedIndex = this.surface.elements.fetchIndexByOffset(localCoordinates.x, localCoordinates.y);
