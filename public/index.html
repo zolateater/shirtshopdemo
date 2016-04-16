@@ -13,33 +13,175 @@
     <title>Page</title>
 </head>
 <body>
-    <div class="page-header">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Накидай текста!</h1>
-                    <h4>
-                        <small>Будет круто! Будет просто класс! Супер круто!</small>
-                    </h4>
-                </div>
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Start Bootstrap</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#textureCaption">Текстура</a>
+                    </li>
+                    <li>
+                        <a href="#cupTypeSelect">Превью</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+    <!-- Header -->
+    <header class="image-bg-fluid-height">
+        <img class="img-responsive img-center" src="http://placehold.it/200x200&amp;text=Logo" alt="">
+    </header>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="section-heading">Нарисуй</h1>
+                <p class="lead section-lead">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </p>
+                <p class="section-paragraph">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Aliquid, suscipit, rerum quos facilis repellat architecto commodi
+                    officia atque nemo facere eum non illo voluptatem quae delectus odit vel itaque amet.
+                </p>
             </div>
         </div>
-    </div>
-    <div class="container">
+        <div id="cupViewer">
+            <div class="row" id="cupTypePanel">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select name="type" id="cupTypeSelect" class="form-control">
+                            <option value="1">Тип 1</option>
+                            <option value="2">Тип 2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="btn-group">
+                        <button class="btn btn-default">+</button>
+                        <button class="btn btn-default">-</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <button class="btn btn-primary">
+                                Превью
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <canvas id="cupSurface" class="form-control" style="height: 200px;">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="jumbotron">
-                    <div class="container canvas-container">
-                        <h2>Рисуй текстуру! Будет круто!</h2>
-                        <canvas id="canvas" width="800" height="600">
-                            Sorry, your browser sucks. What year are you from? Even my cat supports canvas.
                         </canvas>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+
+    <div class="container">
+        <!-- Texture drawing -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="container canvas-container">
+                    <h2 id="textureCaption">Рисуй текстуру! Будет круто!</h2>
+                    <p class="lead section-lead">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <p class="section-paragraph">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        Aliquid, suscipit, rerum quos facilis repellat architecto commodi officia atque nemo facere eum
+                        non illo voluptatem quae delectus odit vel itaque amet.
+                    </p>
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <button class="btn btn-primary" id="btnAddText">+ Tекст</button>
+                            <button class="btn btn-primary" id="btnAddImage">+ Изображение</button>
+                        </div>
+                    </div>
+                    <canvas id="canvas" width="800" height="600">
+                        Sorry, your browser sucks. What year are you from? Even my cat supports canvas.
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Element options and layers list -->
+        <div class="row">
+            <div class="col-md-5">
+                <h3>
+                    Опции выбранного элемента
+                </h3>
+                <div id="noSelectedOptions">
+                    Ничего не выбрано
+                </div>
+                <div id="textOptions">
+                    <div class="form-group">
+                        <label for="selectedTextInput"></label>
+                        <textarea id="selectedTextInput" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div id="imageOptions">
+
+                </div>
+            </div>
+            <div class="col-md-7">
+                <h3>
+                    Слои
+                </h3>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>Тип</td>
+                        <td>Действия</td>
+                    </tr>
+                    <tr>
+                        <td>Текст</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-info">+</button>
+                                <button class="btn btn-info">-</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright © Your Website 2014</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </footer>
+
     <script src="/js/app.js"></script>
 </body>
 </html>

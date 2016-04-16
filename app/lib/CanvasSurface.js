@@ -30,25 +30,33 @@ CanvasSurface.prototype.getElements = function () {
 
 /**
  * Creates new label element in ui collection of the surface and returns it.
- * It doesn't update canvas state to allow adjusting element properties.
  * 
  * @returns {UILabelElement}
  */
 CanvasSurface.prototype.pushLabel = function () {
     var label = this.factory.createLabel();
     this.elements.add(label);
+    this.elements.selectLast();
+
+    this.eventHandler.triggerSelect(label);
+    this.render();
+
     return label;
 };
 
 /**
  * Creates new image element in ui collection
- * This method also does not update canvas state
  *
  * @param {Image} image
  */
 CanvasSurface.prototype.pushImage = function (image) {
     var imageElement = this.factory.createImage(image);
     this.elements.add(imageElement);
+    this.elements.selectLast();
+
+    this.eventHandler.triggerSelect(imageElement);
+    this.render();
+
     return imageElement;
 };
 

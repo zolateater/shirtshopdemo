@@ -112,6 +112,13 @@ UICollection.prototype.select = function (index) {
 };
 
 /**
+ * Selects the last element in the collection
+ */
+UICollection.prototype.selectLast = function () {
+    this.selectedIndex = this.length ? this.length - 1 : -1;
+};
+
+/**
  * Returns selected element
  *
  * @returns {UIElement|null}
