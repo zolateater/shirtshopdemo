@@ -1,0 +1,22 @@
+#canvas {
+    position: relative;
+    display: inline;
+    border: solid 1px rgba(0,0,0,.08);
+}
+#canvas.movable {
+    cursor: move;
+}
+#canvas.resizable {
+    cursor: nwse-resize;
+}
+.page-header {
+    background: #6f5499;
+    color: white;
+    margin-top: 0;
+}
+.page-header small {
+    color: #cdbfe3;
+}
+.canvas-container {
+    overflow: hidden;
+}

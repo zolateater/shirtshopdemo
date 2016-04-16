@@ -1,3 +1,10 @@
+/**
+ * This class is responsible for handling DOM events and triggering application events
+ * Kinda ugly code here
+ *
+ * @param {CanvasSurface} surface
+ * @constructor
+ */
 function CanvasSurfaceEventHandler (surface)
 {
     this.surface = surface;
@@ -6,23 +13,83 @@ function CanvasSurfaceEventHandler (surface)
     this.isResizingClick = false;
     this.lastClickOffset = null;
     this.lastResizeCoordinates = null;
+
+    this.handlers = {
+        onSelect: [],
+        onDeselect: []
+    }
 }
 
 /**
- * Binds all events to the canvas
+ * Binds all event handlers to the HTML canvas
+ * 
  * @param e
  */
-CanvasSurfaceEventHandler.prototype.bindAll = function (e) {
+CanvasSurfaceEventHandler.prototype.bindHtmlCanvasEvents = function (e) {
     this.surface.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
     this.surface.canvas.addEventListener('touchstart', this.handleMouseDown.bind(this));
+
+    // We binding this event to the whole document to stop moving
+    // if user tries to drag an element out of the canvas
     document.addEventListener('mouseup', this.handleMouseUp.bind(this));
     document.addEventListener('touchend', this.handleMouseUp.bind(this));
+
     this.surface.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
     this.surface.canvas.addEventListener('touchmove', this.handleMouseMove.bind(this));
 };
 
 /**
- * Handler for mouse down event
+ * Triggers select event.
+ * This means that all assigned handlers will be executed.
+ *
+ * TODO: Abandon JavaScript and learn TypeScript
+ *
+ * @param {UIElement} element
+ */
+CanvasSurfaceEventHandler.prototype.triggerSelect = function (element) {
+    for (var key in this.handlers.onSelect) {
+        var callback = this.handlers.onSelect[key];
+
+        if (callback instanceof Function) {
+            callback(element);
+        }
+    }
+};
+
+/**
+ * Triggers deselect event.
+ * This means that all assigned handlers will be executed.
+ */
+CanvasSurfaceEventHandler.prototype.triggerDeselect = function () {
+    for (var key in this.handlers.onDeselect) {
+        var callback = this.handlers.onDeselect[key];
+        if (callback instanceof Function) {
+            callback();
+        }
+    }
+};
+
+/**
+ * Adds new handler on element selection event
+ *
+ * @param {function} callback
+ */
+CanvasSurfaceEventHandler.prototype.addSelectEventHandler = function (callback) {
+    this.handlers.onSelect.push(callback);
+};
+
+/**
+ * Adds new handler on element deselection event
+ *
+ * @param {function} callback
+ */
+CanvasSurfaceEventHandler.prototype.addDeselectEventHandler = function (callback) {
+    this.handlers.onDeselect.push(callback);
+};
+
+
+/**
+ * Handler for the mousedown event
  *
  * @param e
  */
@@ -30,30 +97,43 @@ CanvasSurfaceEventHandler.prototype.handleMouseDown = function (e) {
     this.isMouseDown = true;
 
     // Quick hack
-    if (e instanceof TouchEvent) {
+    if (typeof TouchEvent != "undefined" && e instanceof TouchEvent) {
         e = e.touches[0];
     }
 
     var localCoordinates = this.toLocalCoordinates(e.clientX, e.clientY);
-    var oldSelectedElement = this.surface.elements.selectedIndex;
+    var oldSelectedElement = this.surface.getElements().getSelectedIndex();
     var newSelectedIndex = this.surface.elements.fetchIndexByOffset(localCoordinates.x, localCoordinates.y);
     var newSelectedElement = this.surface.elements.get(newSelectedIndex);
 
     var doWeHaveSomethingSelected = newSelectedIndex !== null;
-    var isCurrentlySelectedWasSelectedBefore = doWeHaveSomethingSelected && oldSelectedElement == newSelectedIndex;
+    var isCurrentlySelectedWasSelectedBefore = doWeHaveSomethingSelected &&
+        oldSelectedElement == newSelectedIndex;
 
     if (!doWeHaveSomethingSelected) {
+
+        // If we had something selected before,
+        // it means it is time to call deselect handlers
+        if (oldSelectedElement != null) {
+            this.triggerDeselect();
+        }
+
         this.surface.elements.deselect();
         this.surface.render();
 
         return;
     }
 
+    if (!isCurrentlySelectedWasSelectedBefore) {
+        this.triggerSelect(newSelectedElement);
+    }
+
     // We remember here the last click offset relatively selected element
     this.lastClickOffset = newSelectedElement.getClickOffset(localCoordinates.x, localCoordinates.y);
 
     // Is it a click starting resize operation ?
-    this.isResizingClick = isCurrentlySelectedWasSelectedBefore && this.isResizePossible(newSelectedElement, localCoordinates.x, localCoordinates.y);
+    this.isResizingClick = isCurrentlySelectedWasSelectedBefore &&
+        this.isResizePossible(newSelectedElement, localCoordinates.x, localCoordinates.y);
 
     if (this.isResizingClick) {
         this.lastResizeCoordinates = localCoordinates;
@@ -73,7 +153,7 @@ CanvasSurfaceEventHandler.prototype.handleMouseDown = function (e) {
  *
  * Handler for mouse up event
  *
- * @param e
+ * @param {MouseEvent} e
  */
 CanvasSurfaceEventHandler.prototype.handleMouseUp = function (e) {
     this.isMouseDown = false;
@@ -110,7 +190,7 @@ CanvasSurfaceEventHandler.prototype.toLocalCoordinates = function (clientX, clie
 CanvasSurfaceEventHandler.prototype.handleMouseMove = function (e) {
 
     // Quick hack
-    if (e instanceof TouchEvent) {
+    if (typeof TouchEvent != "undefined" && e instanceof TouchEvent) {
         e = e.touches[0];
     }
 
@@ -139,7 +219,7 @@ CanvasSurfaceEventHandler.prototype.handleMouseMove = function (e) {
         var size = selectedElement.getSize();
         size.resizeBy(newSizeDelta.width, newSizeDelta.height);
     }
-    // Nah, it's just moving an element.
+    // Nah, it's just moving
     else if (this.isMovingClick) {
         selectedElement.moveTo(new Position(
             localCoordinates.x - this.lastClickOffset.top,
@@ -191,7 +271,6 @@ CanvasSurfaceEventHandler.prototype.handleMouseMoveWithoutMouseDown = function (
     if (elementHoverIndex == selectedIndex) {
         // What state is cursor in?
         var resizeState = this.isResizePossible(this.surface.elements.getSelectedElement(), mouseCoordinates.x, mouseCoordinates.y);
-        this.readyForResize = resizeState;
         if (resizeState) {
             this.setResizableState(true);
         }

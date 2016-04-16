@@ -26,7 +26,7 @@ CanvasUISelectedView.prototype.render = function (element) {
 
     this.context.fillText(
         '\u21f2',
-        element.getPosition().getX() + element.getSize().getWidth() - iconResizeWidth + 2,
+        element.getPosition().getX() + element.getSize().getWidth() - iconResizeWidth,
         element.getPosition().getY() + element.getSize().getHeight(),
         iconResizeWidth
     );
