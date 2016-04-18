@@ -10,7 +10,7 @@ function UIImageElement(position, size, image)
     UIElement.call(this, position, size);
 
     if ( ! (image instanceof Image)) {
-        throw new TypeError("Image must have an image type!");
+        throw new TypeError("Image must have Image type!");
     }
 
     this.image = image;
