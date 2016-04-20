@@ -90,8 +90,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="form-group">
-                        <canvas id="cupSurface" class="form-control" style="height: 200px;">
+                    <div class="form-group" style="overflow: hidden; position: relative;">
+                        <canvas id="cupSurface" style="cursor:move; width:1170px; height: 600px;">
 
                         </canvas>
                     </div>
@@ -118,6 +118,11 @@
                         <div class="btn-group">
                             <button class="btn btn-primary" id="btnAddText">+ Tекст</button>
                             <button class="btn btn-primary" id="btnAddImage">+ Изображение</button>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-success" id="updateTexture">
+                                Обновить на кружечке!
+                            </button>
                         </div>
                     </div>
                     <canvas id="canvas" width="800" height="600">

@@ -90,6 +90,15 @@ CanvasSurface.prototype.render = function () {
     this.renderElements();
 };
 
+/**
+ * Generates an image from drawn content
+ * @returns {Image}
+ */
+CanvasSurface.prototype.toImage = function () {
+    var image = new Image();
+    image.src = this.canvas.toDataURL();
+    return image;
+};
 
 /**
  * Adds new event handler on selection of an element
