@@ -17,6 +17,7 @@ gulp.task('build', function () {
             'app/vendor/*.js',
             'app/lib/*.js',
             'app/gl/*.js',
+            'app/components/*.js',
             'app/index.js'
         ]),
         sourceMaps.init(),

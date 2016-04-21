@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     var canvas = document.getElementById('canvas');
-    surface = new CanvasSurface(canvas);
+    var surface = new CanvasSurface(canvas);
 
     var buttonAddElement = document.getElementById('btnAddText');
 
@@ -12,8 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     surface.render();
 
-    modelView = null;
-    
+    // Create properties panel
+    // and attaching it to canvas events
+    var propertiesPanel = new PropertiesPanel(surface);
+    propertiesPanel.bindHandlers();
+
+    // Initializing model viewer
+    var modelView = null;
     var cupSurface = document.getElementById('cupSurface');
     var loader = new ResourceLoader();
 
@@ -23,17 +28,19 @@ document.addEventListener('DOMContentLoaded', function() {
         {key: 'fragmentShader', src: '/shaders/vertex.glsl', type: 'text'},
         {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'}
     ], function () {
+
         modelView = new ModelView(
             cupSurface,
             Storage.get('model'),
             Storage.get('initialTexture'),
-
             Storage.get('fragmentShader'),
             Storage.get('vertexShader')
         );
         modelView.startRender();
     });
-
+    
+    
+    // TODO: more elegant way to do this
     document.getElementById('updateTexture').addEventListener('click', function () {
         modelView.setTexture(surface.toImage());
     });

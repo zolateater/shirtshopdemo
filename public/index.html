@@ -85,13 +85,14 @@
                                 Превью
                             </button>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="form-group" style="overflow: hidden; position: relative;">
-                        <canvas id="cupSurface" style="cursor:move;" width="1170" height="600">
+                    <div class="form-group" id="cupSurfaceContainer" style="position: relative;">
+                        <canvas id="cupSurface"  width="1170" height="600">
 
                         </canvas>
                     </div>
@@ -125,53 +126,76 @@
                             </button>
                         </div>
                     </div>
-                    <canvas id="canvas" width="800" height="600">
-                        Sorry, your browser sucks. What year are you from? Even my cat supports canvas.
-                    </canvas>
+                    <!-- All of the fun -->
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div id="drawingContainer">
+                                <canvas id="canvas" width="800" height="600">
+                                    Sorry, your browser sucks. What year are you from? Even my cat supports canvas.
+                                </canvas>
+                            </div>
+                            <!-- Properties panel -->
+                            <div class="col-md-3">
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
         <!-- Element options and layers list -->
         <div class="row">
-            <div class="col-md-5">
-                <h3>
-                    Опции выбранного элемента
-                </h3>
+            <div class="col-md-6">
+                <h3>Опции выбранного элемента</h3>
                 <div id="noSelectedOptions">
-                    Ничего не выбрано
+                    <p>
+                        Ничего не выбрано
+                    </p>
                 </div>
-                <div id="textOptions">
+                <div id="textOptions" class="hidden">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fontSelect">Шрифт: </label>
+                                <select id="fontSelect" class="form-control">
+                                    <option value="Arial">Arial</option>
+                                    <option value="TimesNewRoman">Times New Roman</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="colorFontSelect">Цвет текста:</label>
+                                <select id="colorFontSelect" class="form-control">
+                                    <option value="#000000">Черный</option>
+                                    <option value="#FF0000">Красный</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label for="selectedTextInput"></label>
-                        <textarea id="selectedTextInput" class="form-control"></textarea>
+                        <label for="selectedTextContent">Текст</label>
+                        <textarea id="selectedTextContent" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Положение</label>
+                        <div>
+                            <div class="btn-group">
+                                <button class="btn btn-primary btn-xs" id="textUpBtn">
+                                    Передний план
+                                </button>
+                                <button class="btn btn-primary  btn-xs" id="textDownBtn">
+                                    Задний план
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div id="imageOptions">
+                <div id="imageOptions" class="hidden">
 
                 </div>
-            </div>
-            <div class="col-md-7">
-                <h3>
-                    Слои
-                </h3>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr>
-                        <td>Тип</td>
-                        <td>Действия</td>
-                    </tr>
-                    <tr>
-                        <td>Текст</td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-info">+</button>
-                                <button class="btn btn-info">-</button>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>

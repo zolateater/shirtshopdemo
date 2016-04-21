@@ -1,3 +1,12 @@
+/**
+ * TODO: refactor this!111111one
+ * @param canvas
+ * @param model
+ * @param initialTexture
+ * @param vertexShader
+ * @param fragmentShader
+ * @constructor
+ */
 function ModelView(canvas, model, initialTexture, vertexShader, fragmentShader) {
     this.canvas = canvas;
     this.gl = canvas.getContext('webgl');
