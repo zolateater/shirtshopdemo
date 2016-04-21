@@ -14,17 +14,17 @@ const isDevelopment = true;
 gulp.task('build', function () {
     return multiPipe(
         gulp.src([
-            'app/vendor/*.js',
-            'app/lib/*.js',
-            'app/gl/*.js',
-            'app/components/*.js',
-            'app/index.js'
+            'src/vendor/*.js',
+            'src/lib/*.js',
+            'src/gl/*.js',
+            'src/components/*.js',
+            'src/index.js'
         ]),
         sourceMaps.init(),
         gulpConcat('app.js'),
         gulpIf(isDevelopment, sourceMaps.write()),
         gulpIf(!isDevelopment, gulpUglify()),
-        gulp.dest('public/js'),
+        gulp.dest('build/js'),
         browserSync.stream()
     ).on('error', gulpNotify.onError(function(error){
         return {
@@ -41,7 +41,7 @@ gulp.task('build-tests', function() {
         gulpConcat('tests.js'),
         gulpIf(isDevelopment, sourceMaps.write()),
         gulpIf(!isDevelopment, gulpUglify()),
-        gulp.dest('public/js'),
+        gulp.dest('build/js'),
         browserSync.stream()
     ).on('error', gulpNotify.onError(function(error){
         return {
@@ -53,7 +53,7 @@ gulp.task('build-tests', function() {
 
 // watcher for app
 gulp.task('watch-app', function() {
-    gulp.watch('app/**/*.js', gulp.series('build'));
+    gulp.watch('src/**/*.js', gulp.series('build'));
 });
 
 // watcher for tests
@@ -65,10 +65,10 @@ gulp.task('watch-tests', function() {
 gulp.task('live-reload', function() {
     browserSync.init({
         // TODO: add proxy using apache
-        server: "./public"
+        server: "./build"
     });
 
-    browserSync.watch(['public/**/*.*']).on('change', browserSync.reload);
+    browserSync.watch(['build/**/*.*']).on('change', browserSync.reload);
 });
 
 

@@ -1,5 +1,9 @@
 /**
  * TODO: refactor this!111111one
+ *
+ * Actually I took this form an old project,
+ * so do not watch the code here too much
+ * 
  * @param canvas
  * @param model
  * @param initialTexture
