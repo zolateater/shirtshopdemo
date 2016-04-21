@@ -1,6 +1,19 @@
 #canvas {
     position: relative;
     display: inline;
+}
+.container-non-responsive {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 1170px;
+}
+#canvas.movable {
+    cursor: move;
+}
+.canvas-container {
+    overflow: hidden;
     border: solid 1px rgba(0,0,0,.08);
     border-radius: 4px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
@@ -9,11 +22,9 @@
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
-#canvas.movable {
-    cursor: move;
-}
-.canvas-container {
-    overflow: hidden;
+#drawingContainer {
+    border: solid 1px rgba(0,0,0,.08);
+    border-radius: 4px;
 }
 #canvas.resizable {
     cursor: nwse-resize;
@@ -21,7 +32,21 @@
 #logo {
     border: solid 1px black;
 }
-
+#btnAddImage {
+    position: relative;
+}
+#fileUploader {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width:100%;
+    font-size: 0;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    opacity:0;
+}
 #cupSurfaceContainer {
     position: relative;
     overflow: hidden;
