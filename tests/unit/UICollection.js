@@ -117,4 +117,51 @@ describe('UICollection', function() {
         assert(collection.fetchElementByOffset(0, 0) == null);
     });
 
+    it("can push element to the end of the collection and remembers selection", function () {
+        var collection = new UICollection();
+        var el0 = new UILabelElement(null, null, "text 0");
+        var el1 = new UILabelElement(null, null, "text 1");
+        var el2 = new UILabelElement(null, null, "text 2");
+        var el3 = new UILabelElement(null, null, "text 3");
+
+        collection.add(el0);
+        collection.add(el1);
+        collection.add(el2);
+        collection.add(el3);
+
+        collection.select(2);
+        collection.toEnd(2);
+
+        assert(collection.get(0).getText() == 'text 0');
+        assert(collection.get(1).getText() == 'text 1');
+        assert(collection.get(2).getText() == 'text 3');
+        assert(collection.get(3).getText() == 'text 2');
+
+        assert(collection.getSelectedElement().getText() == "text 2");
+    });
+
+    it("can push to the start of the collection and remembers selection", function () {
+        var collection = new UICollection();
+
+        var el0 = new UILabelElement(null, null, "text 0");
+        var el1 = new UILabelElement(null, null, "text 1");
+        var el2 = new UILabelElement(null, null, "text 2");
+        var el3 = new UILabelElement(null, null, "text 3");
+
+        collection.add(el0);
+        collection.add(el1);
+        collection.add(el2);
+        collection.add(el3);
+
+        collection.select(2);
+        collection.toStart(2);
+
+        assert(collection.get(0).getText() == 'text 2');
+        assert(collection.get(1).getText() == 'text 0');
+        assert(collection.get(2).getText() == 'text 1');
+        assert(collection.get(3).getText() == 'text 3');
+
+        assert(collection.getSelectedElement().getText() == "text 2");
+    })
+
 });

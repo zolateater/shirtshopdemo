@@ -158,6 +158,45 @@ UICollection.prototype.fetchElementByOffset = function (offsetX, offsetY) {
 };
 
 /**
+ * Pushes element to the end of the collection
+ *
+ * @param index
+ */
+UICollection.prototype.toEnd = function(index)
+{
+    if (!this.has(index)) {
+        throw new RangeError("Collection: index out of bounds!");
+    }
+    var wasSelected = this.selectedIndex == index;
+    var element = this.remove(index);
+    this.add(element);
+
+    if (wasSelected) {
+        this.selectedIndex = this.length - 1;
+    }
+};
+
+/**
+ * Pushes element to the bottom of the collection
+ *
+ * @param index
+ */
+UICollection.prototype.toStart = function(index)
+{
+    if (!this.has(index)) {
+        throw new RangeError("Collection: index out of bounds!");
+    }
+    var wasSelected = this.selectedIndex == index;
+    var element = this.remove(index);
+    this.elements = [element].concat(this.elements);
+
+    if (wasSelected) {
+        this.selectedIndex = 0;
+    }
+};
+
+
+/**
  * Fetches index by passed offset
  *
  * @param offsetX

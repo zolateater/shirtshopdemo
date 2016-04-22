@@ -101,6 +101,32 @@ CanvasSurface.prototype.toImage = function () {
 };
 
 /**
+ * Moves currently selected element to the background
+ */
+CanvasSurface.prototype.selectedToBackground = function () {
+    this.elements.toStart(this.elements.getSelectedIndex());
+};
+
+/**
+ * Moves currently selected element to the foreground
+ */
+CanvasSurface.prototype.selectedToForeground = function () {
+    this.elements.toEnd(this.elements.getSelectedIndex());
+};
+
+/**
+ * Removes currently selected element
+ *
+ * @return {UIElement}
+ */
+CanvasSurface.prototype.removeSelected = function () {
+    var element = this.elements.remove(this.elements.getSelectedIndex());
+    this.eventHandler.triggerDeselect();
+
+    return element;
+};
+
+/**
  * Adds new event handler on selection of an element
  *
  * @param {UISelectedCallback} callback

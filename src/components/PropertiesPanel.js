@@ -18,6 +18,13 @@ function PropertiesPanel(surface)
         textDownButton: document.getElementById('textDownBtn')
     };
     
+    this._commonPanel = {
+        panel: document.getElementById('commonOptions'),
+        removeBtn: document.getElementById('removeBtn'),
+        upBtn: document.getElementById('upBtn'),
+        downBtn: document.getElementById('downBtn')
+    };
+    
     this._imagePanel = {
         panel: document.getElementById('imageOptions')
     };
@@ -32,11 +39,31 @@ function PropertiesPanel(surface)
  */
 PropertiesPanel.prototype.bindHandlers = function () {
     var self = this;
+
+    // Selection events from canvas surface
     this._surface.addSelectEventHandler(function (uiElement) {
         self.setSelected(uiElement);
     });
     this._surface.addDeselectEventHandler(function () {
         self.setSelected(null);
+    });
+
+    // Button click for common options - remove currently selected element
+    this._commonPanel.removeBtn.addEventListener('click', function (event) {
+        self._surface.removeSelected();
+        self._surface.render();
+    });
+
+    // Move foreground
+    this._commonPanel.upBtn.addEventListener('click', function (event) {
+        self._surface.selectedToForeground();
+        self._surface.render();
+    });
+
+    // Move background
+    this._commonPanel.downBtn.addEventListener('click', function (event) {
+        self._surface.selectedToBackground();
+        self._surface.render();
     });
 
     // Binding text change event through text area element
@@ -88,6 +115,7 @@ PropertiesPanel.prototype.setSelected = function (uiElement) {
 PropertiesPanel.prototype.hideAll = function () {
     this._textPanel.panel.classList.add('hidden');
     this._imagePanel.panel.classList.add('hidden');
+    this._commonPanel.panel.classList.add('hidden');
     this._emptyPanel.classList.add('hidden');
 };
 
@@ -100,6 +128,7 @@ PropertiesPanel.prototype.showTextProperties = function () {
     this._textPanel.selectFont.value = this._selectedElement.getFont();
     this._textPanel.selectColor.value = this._selectedElement.getColor();
     this._textPanel.panel.classList.remove('hidden');
+    this._commonPanel.panel.classList.remove('hidden');
 };
 
 /**
@@ -108,6 +137,7 @@ PropertiesPanel.prototype.showTextProperties = function () {
 PropertiesPanel.prototype.showImageProperties = function () {
     this.hideAll();
     this._imagePanel.panel.classList.remove('hidden');
+    this._commonPanel.panel.classList.remove('hidden');
 };
 
 /**
