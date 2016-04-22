@@ -1,9 +1,4 @@
 /**
- * TODO: refactor this!111111one
- *
- * Actually I took this form an old project,
- * so do not watch the code here too much
- *
  * @param canvas
  * @param model
  * @param initialTexture
@@ -48,28 +43,27 @@ ModelView.prototype.setTexture = function (image) {
      */
     var gl = this.gl;
 
-    // Создаем текстуру
+    // Creating texture
     this.modelTexture = gl.createTexture();
-    // Назначаем ее
+    // Binding it
     gl.bindTexture(gl.TEXTURE_2D, this.modelTexture);
-    // Говорим, как мы и что хотим рисовать
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     // i for integer , s, t - u, v
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    // Как точки назначаются
+    // Filters
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     // Сама текстура
     gl.texImage2D(
-        gl.TEXTURE_2D, // Тип текстуры
-        0, // Уровень детализации
-        gl.RGBA, // Формат
+        gl.TEXTURE_2D, // Texture type
+        0, // Detail level
+        gl.RGBA, // What format do we use
         gl.RGBA,
-        gl.UNSIGNED_BYTE, // Тип данных
-        this.texture // Сама текстура
+        gl.UNSIGNED_BYTE, // Data type
+        this.texture // Texture itself
     );
-    // Разназначаем
+    // Unbind for now
     gl.bindTexture(gl.TEXTURE_2D, null);
 };
 
@@ -77,7 +71,7 @@ ModelView.prototype.startRender = function () {
     var gl = this.gl;
     
     // Включаем проверку глубины
-    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.DEPTH_TEST); 
     
     // Задаем цвет очистки
     gl.clearColor(0.8, 0.9, 0.9 ,1.0);
@@ -136,7 +130,6 @@ ModelView.prototype.startRender = function () {
         0 // Отступ (в байтах) от начала данных, принадлежащих одной вершине
     );
     gl.enableVertexAttribArray(texCoordAttributeLocation);
-
 
     // Матрицы - местоположение в шейдерах
     var matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
@@ -217,4 +210,3 @@ ModelView.prototype.startRender = function () {
     };
     requestAnimationFrame(loop);
 };
-
