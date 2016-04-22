@@ -84,6 +84,7 @@ ModelView.prototype.startRender = function () {
     var modelVertexes = model.meshes[0].vertices;
     var modelIndexes = Array.prototype.concat.apply([], model.meshes[0].faces);
     var modelTexCoords = model.meshes[0].texturecoords[0];
+    var modelNormals = model.meshes[0].normals;
 
     // Создаем буфер - через него передается информация в GPU
     var modelVertexBufferObject = gl.createBuffer();
@@ -102,6 +103,11 @@ ModelView.prototype.startRender = function () {
     // Назначаем его активным
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, maskIndexBufferObject);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(modelIndexes), gl.STATIC_DRAW);
+
+    // Буфер с нормалями
+    var modelNormalBufferObject = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, modelNormalBufferObject);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelNormals), gl.STATIC_DRAW);
 
     // Уведомляем шейдер о том, как брать данные из буфера в качестве входных параметров
     var positionAttributeLocation = gl.getAttribLocation(program, 'vertPosition');
@@ -129,6 +135,19 @@ ModelView.prototype.startRender = function () {
         0 // Отступ (в байтах) от начала данных, принадлежащих одной вершине
     );
     gl.enableVertexAttribArray(texCoordAttributeLocation);
+
+    // Нормали в шейдере
+    gl.bindBuffer(gl.ARRAY_BUFFER, modelNormalBufferObject);
+    var normalAttributeLocation = gl.getAttribLocation(program, 'vertNormal');
+    gl.vertexAttribPointer(
+        normalAttributeLocation, // наш атрибут
+        3, // Количество элементов на атрибут
+        gl.FLOAT, // Тип каждого элемента буфера
+        gl.TRUE, // Нормализованный вид?
+        3 * Float32Array.BYTES_PER_ELEMENT, // Размер одной вершины (байт)
+        0 // Отступ (в байтах) от начала данных, принадлежащих одной вершине
+    );
+    gl.enableVertexAttribArray(normalAttributeLocation);
 
     // Матрицы - местоположение в шейдерах
     var matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
