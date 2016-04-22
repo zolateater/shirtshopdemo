@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // and attaching it to canvas events
     var propertiesPanel = new PropertiesPanel(surface);
     propertiesPanel.bindHandlers();
-    
+
 
     // Initializing model viewer
-    var modelView = null;
+    window.modelView = null;
     var cupSurface = document.getElementById('cupSurface');
     var loader = new ResourceLoader();
 

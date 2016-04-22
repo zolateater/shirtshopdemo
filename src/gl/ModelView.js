@@ -3,7 +3,7 @@
  *
  * Actually I took this form an old project,
  * so do not watch the code here too much
- * 
+ *
  * @param canvas
  * @param model
  * @param initialTexture
@@ -13,17 +13,26 @@
  */
 function ModelView(canvas, model, initialTexture, vertexShader, fragmentShader) {
     this.canvas = canvas;
+
     this.gl = canvas.getContext('webgl');
+
     if (!this.gl) {
-        alert('some error');
+        alert('You do not have WebGL support');
+        throw new Error('WebGL support is required!');
     }
     
     this.model = model;
     this.texture = initialTexture;
     this.vertexShaderSource = vertexShader;
     this.fragmentShaderSource = fragmentShader;
+    this.initialize();
     this.setTexture(initialTexture);
 }
+
+ModelView.prototype.initialize = function () {
+    var shaderCompiler = new ShaderCompiler(this.gl);
+    this.shaderProgram = shaderCompiler.makeProgram(this.vertexShaderSource, this.fragmentShaderSource);
+};
 
 /**
  * Sets a new texture
@@ -34,6 +43,9 @@ ModelView.prototype.setTexture = function (image) {
     // TODO implement texture update
     this.texture = image;
 
+    /**
+     * @type {WebGLRenderingContext|*}
+     */
     var gl = this.gl;
 
     // Создаем текстуру
@@ -72,52 +84,8 @@ ModelView.prototype.startRender = function () {
     // Очистка - что очищаем - буфер цвета, или же буфер глубины
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // Создаем шейдеры
-    var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-    var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-
-    // Указываем исходный код шейдеров
-    gl.shaderSource(vertexShader, this.vertexShaderSource);
-    gl.shaderSource(fragmentShader, this.fragmentShaderSource);
-
-    // Компиляция шейдеров
-    gl.compileShader(vertexShader);
-
-    // Проверка статуса компиляции
-    if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-        console.error('Error compiling vertex shader!', gl.getShaderInfoLog(vertexShader));
-        return;
-    }
-
-    gl.compileShader(fragmentShader);
-    if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-        console.error('Error compiling vertex shader!', gl.getShaderInfoLog(fragmentShader));
-        return;
-    }
-
-    // Сообщаем WebGL, что мы хоти использовать эти шейдеры
-    var program = gl.createProgram();
-
-    // WebGL знает, какой шейдер какой тип имеет
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    // Линкуем
-    gl.linkProgram(program);
-
-    // Ошибки линковки
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error('Linking error!', gl.getProgramInfoLog(program));
-        return;
-    }
-
-    // Только для тестирования - ловит доп. ошибки
-    gl.validateProgram(program);
-    if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) {
-        console.error('Validating error!', gl.getProgramInfoLog(program));
-        return;
-    }
-
     var model = this.model;
+    var program = this.shaderProgram;
 
     // Создаем буферы
     var modelVertexes = model.meshes[0].vertices;
@@ -223,6 +191,7 @@ ModelView.prototype.startRender = function () {
     // Главный цикр рендера
     var identityMatrix = new Float32Array(16);
     mat4.identity(identityMatrix);
+
     var loop = function () {
         // Какую матрицу вокруг какой вращаем
         mat4.rotate(worldMatrix, identityMatrix, angleX, [1, 0, 0]);
@@ -248,3 +217,4 @@ ModelView.prototype.startRender = function () {
     };
     requestAnimationFrame(loop);
 };
+
