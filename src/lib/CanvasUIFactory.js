@@ -17,6 +17,7 @@ function CanvasUIFactory(context)
  * @returns {UILabelElement}
  */
 CanvasUIFactory.prototype.createLabel = function () {
+
     var label = new UILabelElement(new Position(0, 50));
     label.setView(new CanvasUILabelView(this.context));
 

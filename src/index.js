@@ -2,21 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var canvas = document.getElementById('canvas');
     var surface = new CanvasSurface(canvas);
-
-    var buttonAddElement = document.getElementById('btnAddText');
-
-    // Add event listener for click
-    buttonAddElement.addEventListener('click', function () {
-        surface.pushLabel();
-    });
-
     surface.render();
+
+    // Panel for creating new elements on
+    var componentPanel = new ComponentsPanel(surface);
+    componentPanel.bindHandlers();
 
     // Create properties panel
     // and attaching it to canvas events
     var propertiesPanel = new PropertiesPanel(surface);
     propertiesPanel.bindHandlers();
-
 
     // Initializing model viewer
     window.modelView = null;
@@ -38,12 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
             Storage.get('vertexShader')
         );
         modelView.startRender();
-    });
-    
-    
-    // TODO: more elegant way to do this
-    document.getElementById('updateTexture').addEventListener('click', function () {
-        modelView.setTexture(surface.toImage());
     });
 
     resourcePreparer.startLoading();

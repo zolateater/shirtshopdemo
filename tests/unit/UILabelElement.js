@@ -29,4 +29,14 @@ describe('UILabelElement', function() {
         assert(element.getText() == "other text");
     });
 
+    it("has style options allowed to be changed", function () {
+        var element = new UILabelElement(null, null, "text");
+        assert(element.getFont() != null);
+
+        element.setFont('Comic Sans');
+        assert(element.getFont() == 'Comic Sans');
+
+        element.setColor('Black');
+        assert(element.getColor() == 'Black');
+    });
 });

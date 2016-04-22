@@ -1,9 +1,9 @@
 /**
- * @param canvas
+ * @param {HTMLCanvasElement} canvas
  * @param model
- * @param initialTexture
- * @param vertexShader
- * @param fragmentShader
+ * @param {Image} initialTexture
+ * @param {string} vertexShader
+ * @param {string} fragmentShader
  * @constructor
  */
 function ModelView(canvas, model, initialTexture, vertexShader, fragmentShader) {
@@ -24,6 +24,9 @@ function ModelView(canvas, model, initialTexture, vertexShader, fragmentShader) 
     this.setTexture(initialTexture);
 }
 
+/**
+ * Initializes some of... I call it things
+ */
 ModelView.prototype.initialize = function () {
     var shaderCompiler = new ShaderCompiler(this.gl);
     this.shaderProgram = shaderCompiler.makeProgram(this.vertexShaderSource, this.fragmentShaderSource);
@@ -35,12 +38,8 @@ ModelView.prototype.initialize = function () {
  * @param {Image} image
  */
 ModelView.prototype.setTexture = function (image) {
-    // TODO implement texture update
-    this.texture = image;
 
-    /**
-     * @type {WebGLRenderingContext|*}
-     */
+    this.texture = image;
     var gl = this.gl;
 
     // Creating texture
@@ -71,7 +70,7 @@ ModelView.prototype.startRender = function () {
     var gl = this.gl;
     
     // Включаем проверку глубины
-    gl.enable(gl.DEPTH_TEST); 
+    gl.enable(gl.DEPTH_TEST);
     
     // Задаем цвет очистки
     gl.clearColor(0.8, 0.9, 0.9 ,1.0);
@@ -194,7 +193,7 @@ ModelView.prototype.startRender = function () {
 
         // Назначение текстуры
         gl.bindTexture(gl.TEXTURE_2D, self.modelTexture);
-        // Слот
+        // Активный слот текстуры
         gl.activeTexture(gl.TEXTURE0);
 
         gl.clearColor(0.8, 0.9, 0.9 ,1.0);

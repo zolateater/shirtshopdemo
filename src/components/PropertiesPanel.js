@@ -1,4 +1,7 @@
 /**
+ * Part of the document for manipulation with properties 
+ * of the selected UIElement on CanvasSurface
+ *
  * Aware of the document content
  * Handles HTML manipulations
  *
@@ -43,6 +46,18 @@ PropertiesPanel.prototype.bindHandlers = function () {
         self._selectedElement.setText(this.value);
         self._surface.render();
     });
+
+    // Updates selected font
+    this._textPanel.selectFont.addEventListener('change', function () {
+        self._selectedElement.setFont(this.value);
+        self._surface.render();
+    });
+
+    // Updates selected color
+    this._textPanel.selectColor.addEventListener('change', function () {
+        self._selectedElement.setColor(this.value);
+        self._surface.render();
+    });
 };
 
 /**
@@ -82,6 +97,8 @@ PropertiesPanel.prototype.hideAll = function () {
 PropertiesPanel.prototype.showTextProperties = function () {
     this.hideAll();
     this._textPanel.textArea.innerHTML = this._selectedElement.getText();
+    this._textPanel.selectFont.value = this._selectedElement.getFont();
+    this._textPanel.selectColor.value = this._selectedElement.getColor();
     this._textPanel.panel.classList.remove('hidden');
 };
 

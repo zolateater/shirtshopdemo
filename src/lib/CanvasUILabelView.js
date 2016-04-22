@@ -10,17 +10,16 @@ function CanvasUILabelView(context) {
 CanvasUILabelView.prototype = Object.create(CanvasUIElementView.prototype);
 
 /**
+ * Renders text element
  *
- * @param {UIElement} element
+ * @param {UILabelElement} element
  */
 CanvasUILabelView.prototype.render = function (element) {
+    // Our text size fits bounds
     var fontSize = element.getSize().getHeight();
 
-    // TODO: color styles
-
-
-    this.context.font = fontSize + "px Arial";
-    this.context.fillStyle = "#000000";
+    this.context.font = fontSize + "px " + element.getFont();
+    this.context.fillStyle = element.getColor();
     this.context.textBaseline = 'hanging';
 
     this.context.fillText(

@@ -119,7 +119,7 @@ CanvasSurface.prototype.addDeselectEventHandler = function (callback) {
 
 /**
  * Get canvas bound rectangle.
- * Ugly method.
+ * Kinda ugly method.
  *
  * @returns {{top: number, right: number, bottom: number, left: number}}
  */

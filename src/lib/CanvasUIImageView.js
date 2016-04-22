@@ -9,3 +9,21 @@ function CanvasUIImageView(context) {
 }
 
 CanvasUIImageView.prototype = Object.create(CanvasUIElementView.prototype);
+
+/**
+ * Renders an image element
+ *
+ * @param {UIImageElement} uiImageElement
+ */
+CanvasUIImageView.prototype.render = function (uiImageElement) {
+    var pos = uiImageElement.getPosition();
+    var size = uiImageElement.getSize();
+
+    this.context.drawImage(
+        uiImageElement.getImage(),
+        pos.getX(),
+        pos.getY(),
+        size.getWidth(),
+        size.getHeight()
+    );
+};
