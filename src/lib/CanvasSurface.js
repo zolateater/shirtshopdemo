@@ -17,6 +17,20 @@ function CanvasSurface(canvas)
     this.elements.add(this.factory.createLabel());
     this.eventHandler = new CanvasSurfaceEventHandler(this);
     this.eventHandler.bindHtmlCanvasEvents();
+
+    /**
+     * This is a flag for detecting if we are exporting
+     * result image as final texture.
+     *
+     * If this is true, then we shouldn't show any
+     * selection borders
+     *
+     * @type {boolean}
+     * @private
+     */
+    this._isExportingRender = false;
+
+    this.clearColor = '#FFFFFF';
 }
 
 /**
@@ -64,8 +78,17 @@ CanvasSurface.prototype.pushImage = function (image) {
  * Clear the related canvas.
  */
 CanvasSurface.prototype.clear = function () {
-    this.context.fillStyle = "#FFFFFF";
+    this.context.fillStyle = this.clearColor;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+};
+
+/**
+ * Sets the clear color
+ * 
+ * @param {string} color
+ */
+CanvasSurface.prototype.setClearColor = function (color) {
+    this.clearColor = color;
 };
 
 /**
@@ -75,8 +98,8 @@ CanvasSurface.prototype.renderElements = function () {
     var selectedIndex = this.elements.getSelectedIndex();
     for (var i = 0; i < this.elements.length; i++) {
         this.elements.get(i).render();
-        if (i == selectedIndex) {
-            // TODO: check if we are creating texture
+
+        if (i == selectedIndex && ! this._isExportingRender) {
             new CanvasUISelectedView(this.context).render(this.elements.get(i));
         }
     }
@@ -95,8 +118,16 @@ CanvasSurface.prototype.render = function () {
  * @returns {Image}
  */
 CanvasSurface.prototype.toImage = function () {
+
+    this._isExportingRender = true;
+    this.render();
+
     var image = new Image();
     image.src = this.canvas.toDataURL();
+
+    this._isExportingRender = false;
+    this.render();
+
     return image;
 };
 

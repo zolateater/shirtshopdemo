@@ -5,7 +5,7 @@
  * @constructor
  */
 function CanvasUISelectedView(context) {
-    if (!context instanceof CanvasRenderingContext2D) {
+    if ( ! (context instanceof CanvasRenderingContext2D)) {
         throw new TypeError('Canvas UI Element View error! Context does not have type CanvasRenderingContext2D!');
     }
 
@@ -25,7 +25,7 @@ CanvasUISelectedView.prototype.render = function (element) {
     this.context.textBaseline = 'bottom';
 
     this.context.fillText(
-        '\u21f2',
+        CanvasUISelectedView.ResizeSymbol,
         element.getPosition().getX() + element.getSize().getWidth() - iconResizeWidth,
         element.getPosition().getY() + element.getSize().getHeight(),
         iconResizeWidth
@@ -40,3 +40,9 @@ CanvasUISelectedView.prototype.render = function (element) {
         element.getSize().getHeight()
     );
 };
+
+/**
+ * @const
+ * @type {string}
+ */
+CanvasUISelectedView.ResizeSymbol = '\u21f2';

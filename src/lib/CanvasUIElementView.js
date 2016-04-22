@@ -4,7 +4,7 @@
  * @constructor
  */
 function CanvasUIElementView(context) {
-    if (!context instanceof CanvasRenderingContext2D) {
+    if ( ! (context instanceof CanvasRenderingContext2D)) {
         throw new TypeError('Canvas UI Element View error! Context is not a context');
     }
 
