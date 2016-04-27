@@ -1,39 +1,46 @@
 /**
- * @param {HTMLCanvasElement} canvas
- * @param model
+ * @param canvas
+ * @param {CanvasRenderingContext2D} glContext
  * @param {Image} initialTexture
  * @param {string} vertexShader
  * @param {string} fragmentShader
  * @constructor
  */
-function ModelView(canvas, model, initialTexture, vertexShader, fragmentShader) {
+function ModelView(canvas, glContext, initialTexture, vertexShader, fragmentShader) {
+
     this.canvas = canvas;
+    this.gl = glContext;
 
-    this.gl = canvas.getContext('webgl');
 
-    if (!this.gl) {
-        alert('You do not have WebGL support');
-        throw new Error('WebGL support is required!');
-    }
-    
-    this.model = model;
     this.texture = initialTexture;
-    this.vertexShaderSource = vertexShader;
-    this.fragmentShaderSource = fragmentShader;
-    this.initialize();
+    this.initialize(vertexShader, fragmentShader);
+
     this.setTexture(initialTexture);
 }
 
 /**
- * Initializes some of... I call it things
+ *
+ * @param {string} vertexShader - vertex shader source
+ * @param {string} fragmentShader - fragment shader source
  */
-ModelView.prototype.initialize = function () {
-    var shaderCompiler = new ShaderCompiler(this.gl);
-    this.shaderProgram = shaderCompiler.makeProgram(this.vertexShaderSource, this.fragmentShaderSource);
+ModelView.prototype.initialize = function (vertexShader, fragmentShader)
+{
+    var gl = this.gl;
+
+    // Включаем проверку глубины
+    gl.enable(gl.DEPTH_TEST);
+
+    // Задаем цвет очистки
+    gl.clearColor(0.8, 0.9, 0.9 , 0.0);
+    // Очистка - что очищаем - буфер цвета, или же буфер глубины
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    var shaderCompiler = new ShaderCompiler(gl);
+    this.shaderProgram = shaderCompiler.makeProgram(vertexShader, fragmentShader);
 };
 
 /**
- * Sets a new texture
+ * Sets a new texture as active texture
  * 
  * @param {Image} image
  */
@@ -66,53 +73,23 @@ ModelView.prototype.setTexture = function (image) {
     gl.bindTexture(gl.TEXTURE_2D, null);
 };
 
-ModelView.prototype.startRender = function () {
-    var gl = this.gl;
-    
-    // Включаем проверку глубины
-    gl.enable(gl.DEPTH_TEST);
-    
-    // Задаем цвет очистки
-    gl.clearColor(0.8, 0.9, 0.9 , 0.0);
-    // Очистка - что очищаем - буфер цвета, или же буфер глубины
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+/**
+ * Sets active model and binds all of the buffers
+ *
+ * @param {Model} model
+ */
+ModelView.prototype.setModel = function (model) {
 
-    var model = this.model;
+    this.model = model;
     var program = this.shaderProgram;
+    var gl = this.gl;
 
-    // Создаем буферы
-    var modelVertexes = model.meshes[0].vertices;
-    var modelIndexes = Array.prototype.concat.apply([], model.meshes[0].faces);
-    var modelTexCoords = model.meshes[0].texturecoords[0];
-    var modelNormals = model.meshes[0].normals;
-
-    // Создаем буфер - через него передается информация в GPU
-    var modelVertexBufferObject = gl.createBuffer();
-    // Назначаем его активным
-    gl.bindBuffer(gl.ARRAY_BUFFER, modelVertexBufferObject);
-    // STATIC_DRAW - копируем единожды из CPU в GPU
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelVertexes), gl.STATIC_DRAW);
-
-    // Отдельный буфер для текстурных координат
-    var modelTexCoordsBufferObject = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, modelTexCoordsBufferObject);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelTexCoords), gl.STATIC_DRAW);
-
-    // Создаем индексный буфер для указания порядка вершин
-    var maskIndexBufferObject = gl.createBuffer();
-    // Назначаем его активным
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, maskIndexBufferObject);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(modelIndexes), gl.STATIC_DRAW);
-
-    // Буфер с нормалями
-    var modelNormalBufferObject = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, modelNormalBufferObject);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelNormals), gl.STATIC_DRAW);
+    model.bindBuffers(gl);
 
     // Уведомляем шейдер о том, как брать данные из буфера в качестве входных параметров
     var positionAttributeLocation = gl.getAttribLocation(program, 'vertPosition');
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, modelVertexBufferObject);
+    gl.bindBuffer(gl.ARRAY_BUFFER, model.modelVertexBufferObject);
     gl.vertexAttribPointer(
         positionAttributeLocation, // наш атрибут
         3, // Количество элементов на атрибут
@@ -124,7 +101,7 @@ ModelView.prototype.startRender = function () {
     // Включаем атрибут
     gl.enableVertexAttribArray(positionAttributeLocation);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, modelTexCoordsBufferObject);
+    gl.bindBuffer(gl.ARRAY_BUFFER, model.modelTexCoordsBufferObject);
     var texCoordAttributeLocation = gl.getAttribLocation(program, 'vertTexCoord');
     gl.vertexAttribPointer(
         texCoordAttributeLocation, // наш атрибут
@@ -137,7 +114,7 @@ ModelView.prototype.startRender = function () {
     gl.enableVertexAttribArray(texCoordAttributeLocation);
 
     // Нормали в шейдере
-    gl.bindBuffer(gl.ARRAY_BUFFER, modelNormalBufferObject);
+    gl.bindBuffer(gl.ARRAY_BUFFER, model.modelNormalBufferObject);
     var normalAttributeLocation = gl.getAttribLocation(program, 'vertNormal');
     gl.vertexAttribPointer(
         normalAttributeLocation, // наш атрибут
@@ -149,10 +126,15 @@ ModelView.prototype.startRender = function () {
     );
     gl.enableVertexAttribArray(normalAttributeLocation);
 
+};
+
+ModelView.prototype.startRender = function () {
+    var gl = this.gl;
+
     // Матрицы - местоположение в шейдерах
-    var matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
-    var matViewUniformLocation = gl.getUniformLocation(program, 'mView');
-    var matProjectionUniformLocation = gl.getUniformLocation(program, 'mProjection');
+    var matWorldUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mWorld');
+    var matViewUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mView');
+    var matProjectionUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mProjection');
 
     // Сами матрицы
     var worldMatrix = new Float32Array(16);
@@ -165,7 +147,7 @@ ModelView.prototype.startRender = function () {
     mat4.perspective(projectionMatrix, glMatrix.toRadian(30), this.canvas.width / this.canvas.height, 0.01, 100.0);
 
     // Какую шейдерную программу используем
-    gl.useProgram(program);
+    gl.useProgram(this.shaderProgram);
 
     // Передаем в шейдер. TRUE - чтобы транспонировать
     gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
@@ -212,6 +194,7 @@ ModelView.prototype.startRender = function () {
 
         // Назначение текстуры
         gl.bindTexture(gl.TEXTURE_2D, self.modelTexture);
+
         // Активный слот текстуры
         gl.activeTexture(gl.TEXTURE0);
 
@@ -220,7 +203,7 @@ ModelView.prototype.startRender = function () {
 
         gl.drawElements(
             gl.TRIANGLES, // Как рисуем,
-            modelIndexes.length,
+            self.model.modelIndexes.length,
             gl.UNSIGNED_SHORT, // Тип
             0 // Сколько пропускам вершин
         );

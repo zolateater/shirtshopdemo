@@ -24,9 +24,8 @@ Storage.remember = function (key, value) {
  * Allows you to get what you want but only if you remember this earlier
  * 
  * @param {string} key
- * @param {string} content
  */
-Storage.get = function (key, content) {
+Storage.get = function (key) {
     var somethingYouWant = Storage._content[key];
 
     if (typeof somethingYouWant == 'undefined') {

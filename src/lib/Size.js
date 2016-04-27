@@ -58,10 +58,10 @@ Size.minHeight = 40;
  * const for default width
  * @type {number}
  */
-Size.defaultWidth = 50;
+Size.defaultWidth = 150;
 
 /**
  * const for default height
  * @type {number}
  */
-Size.defaultHeight = 50;
+Size.defaultHeight = 70;

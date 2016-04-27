@@ -26,13 +26,30 @@ document.addEventListener('DOMContentLoaded', function() {
         {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'}
     ], function () {
 
+        // TODO: extract
+        var glContext = cupSurface.getContext('webgl');
+
+        if (!glContext) {
+            glContext = cupSurface.getContext('experimental-webgl')
+        }
+
+        if (!glContext) {
+            alert('Seems like your browser does not support WebGL. Come back when you update your browser!');
+            throw new Error('WebGL support is required!');
+        }
+
+        window.modelCup1 = new Model(glContext, Storage.get('modelCup1'));
+        window.modelCup2 = new Model(glContext, Storage.get('modelCup2'));
+
         modelView = new ModelView(
             cupSurface,
-            Storage.get('modelCup1'),
+            glContext,
             Storage.get('initialTexture'),
             Storage.get('fragmentShader'),
             Storage.get('vertexShader')
         );
+
+        modelView.setModel(window.modelCup1);
         modelView.startRender();
     });
 
