@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var loader = new ResourceLoader();
 
     var resourcePreparer = new ResourcePreparer(loader, [
-        {key: 'model', src: '/models/cupModel.json', type: 'json'},
+        {key: 'modelCup1', src: '/models/cup1.json', type: 'json'},
+        {key: 'modelCup2', src: '/models/cup2.json', type: 'json'},
         {key: 'vertexShader', src: '/shaders/fragment.glsl', type: 'text'},
         {key: 'fragmentShader', src: '/shaders/vertex.glsl', type: 'text'},
         {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'}
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         modelView = new ModelView(
             cupSurface,
-            Storage.get('model'),
+            Storage.get('modelCup1'),
             Storage.get('initialTexture'),
             Storage.get('fragmentShader'),
             Storage.get('vertexShader')

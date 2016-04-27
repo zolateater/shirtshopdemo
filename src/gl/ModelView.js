@@ -73,7 +73,7 @@ ModelView.prototype.startRender = function () {
     gl.enable(gl.DEPTH_TEST);
     
     // Задаем цвет очистки
-    gl.clearColor(0.8, 0.9, 0.9 ,1.0);
+    gl.clearColor(0.8, 0.9, 0.9 , 0.0);
     // Очистка - что очищаем - буфер цвета, или же буфер глубины
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -160,9 +160,9 @@ ModelView.prototype.startRender = function () {
     var projectionMatrix = new Float32Array(16);
     mat4.identity(worldMatrix);
     // Позиция наблюдателя, куда он смотрит, плюс вектор верха
-    mat4.lookAt(viewMatrix, [0, 0, -5], [0, 0, 0], [0, 1, 0]);
+    mat4.lookAt(viewMatrix, [0, 0, -10], [0, 0, 0], [0, 1, 0]);
     // Поле обзора (в радианах), viewport, closest plane, far plane
-    mat4.perspective(projectionMatrix, glMatrix.toRadian(30), this.canvas.width / this.canvas.height, 0.001, 10.0);
+    mat4.perspective(projectionMatrix, glMatrix.toRadian(30), this.canvas.width / this.canvas.height, 0.01, 100.0);
 
     // Какую шейдерную программу используем
     gl.useProgram(program);
