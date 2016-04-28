@@ -27,10 +27,10 @@
             <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#textureCaption">Текстура</a>
+                        <a href="#textureCaption">Нарисуй себе чашку!</a>
                     </li>
                     <li>
-                        <a href="#cupTypeSelect">Превью</a>
+                        <a href="#modelViewCaption">Посмотри как здорово вышло!</a>
                     </li>
                 </ul>
             </div>
@@ -47,11 +47,11 @@
     <div class="container-non-responsive">
         <div class="row">
             <div class="col-lg-12">
-                <p class="lead section-lead">
+                <p class="lead section-lead" id="modelViewCaption">
                     Выберите тип чашки
                 </p>
                 <p class="section-paragraph">
-                    Выбрали? Нажмите в меню наверху "Текстура". <br>
+                    Выбрали тип? Нажмите в меню наверху "Нарисуй себе чашку!". <br>
                     Наберите текст, загрузите картинку. Можете даже выбрать фон (крутая фича, неправда ли?). <br>
                     Мы аккуратно все перенесем на чашку.
                 </p>
@@ -62,15 +62,19 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <select name="type" id="cupTypeSelect" class="form-control">
-                            <option value="1">Тип 1</option>
-                            <option value="2">Тип 2</option>
+                            <option value="cup1">Тип 1</option>
+                            <option value="cup2">Тип 2</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="btn-group">
-                        <button class="btn btn-default">+</button>
-                        <button class="btn btn-default">-</button>
+                        <button class="btn btn-default" id="btnZoomIn">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <button class="btn btn-default" id="btnZoomOut">
+                            <i class="fa fa-minus"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -109,7 +113,7 @@
                     <p class="section-paragraph">
                         Ну, намалевать чего-то не получится, но можно что-нибудь разместить интересное. <br>
                         Какую-нибудь надпись. Например - "пульверизатор". <br>
-                        Как закончите - нажмите кнопку "Обновить на кружечке, а потом - "Превью в меню". <br>
+                        Как закончите - нажмите кнопку "Обновить на кружечке, а потом - "Посмотри как здорово вышло!". <br>
                         Не хотите иметь дело с меню? Скрольте и страдайте.
                     </p>
                     <div class="row">
@@ -130,9 +134,10 @@
                                     <select id="selectBackground" class="form-control">
                                         <option value="">Цвет фона...</option>
                                         <option value="#FFFFFF">Белый</option>
-                                        <option value="#FF0000">Красный</option>
-                                        <option value="#00FF00">Зеленый</option>
-                                        <option value="#0000FF">Синий</option>
+                                        <option value="#d9534f">Красный</option>
+                                        <option value="#4cae4c">Зеленый</option>
+                                        <option value="#337ab7">Синий</option>
+                                        <option value="#f0ad4e">Желтый</option>
                                     </select>
 
                                     <div class="btn-group">

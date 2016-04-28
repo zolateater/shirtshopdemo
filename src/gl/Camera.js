@@ -7,17 +7,18 @@
  */
 function Camera()
 {
+    // Initial angle and distance
     this.angleTheta = 30;
+    this.angleFi = 0;
+    this.distance = 20;
 
     this.minAngleTheta = 10;
     this.maxAngleTheta = 170;
 
-    this.angleFi = 0;
-    this.distance = 20;
-
     this.position = this.getNewPosition();
 
-    this.lookAt = [0, 0, 1.5];
+    // Where to look
+    this.lookAt = [0, 0, 1.3];
     this.up = [0, 0, 1];
 
     this.matrix = new Float32Array(16);
@@ -37,6 +38,12 @@ Camera.prototype.getNewPosition = function () {
     ];
 };
 
+/**
+ * Moves camera around the object
+ *
+ * @param angleFi
+ * @param angleTheta
+ */
 Camera.prototype.move = function (angleFi, angleTheta) {
 
     this.angleFi += angleFi;
@@ -51,16 +58,49 @@ Camera.prototype.move = function (angleFi, angleTheta) {
     this.updateMatrix();
 };
 
-Camera.prototype.rotateRight = function (deltaAngle)
-{
-    this.angle += de;
-    this.position = this.getNewPosition();
-    this.updateMatrix();
+/**
+ * Move camera forward
+ */
+Camera.prototype.zoomIn = function () {
+    if (this.distance > 4) {
+        this.distance--;
+        this.position = this.getNewPosition();
+        this.updateMatrix();
+    }
 };
 
+/**
+ * Move camera backward
+ */
+Camera.prototype.zoomOut = function () {
+    if (this.distance < 20) {
+        this.distance++;
+        this.position = this.getNewPosition();
+        this.updateMatrix();
+    }
+};
+
+/**
+ * Sets camera angle
+ *
+ * @param angleFi
+ * @param angleTheta
+ */
+Camera.prototype.setAngle = function (angleFi, angleTheta) {
+    this.angleFi = angleFi;
+    this.angleTheta = angleTheta;
+};
+
+/**
+ * Updates view matrix
+ */
 Camera.prototype.updateMatrix = function () {
-    // Позиция наблюдателя, куда он смотрит, плюс вектор верха
     mat4.lookAt(this.matrix, this.position, this.lookAt, this.up);
 };
 
+/**
+ * Const for translating degrees to radians
+ *
+ * @type {number}
+ */
 Camera.ToRadians = Math.PI / 180;

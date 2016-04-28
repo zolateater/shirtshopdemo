@@ -4,17 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var surface = new CanvasSurface(canvas);
     surface.render();
 
-    // Panel for creating new elements on
-    var componentPanel = new ComponentsPanel(surface);
-    componentPanel.bindHandlers();
-
     // Create properties panel
     // and attaching it to canvas events
     var propertiesPanel = new PropertiesPanel(surface);
     propertiesPanel.bindHandlers();
 
-    // Initializing model viewer
-    window.modelView = null;
     var cupSurface = document.getElementById('cupSurface');
     var loader = new ResourceLoader();
 
@@ -26,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'}
     ], function () {
 
-        // TODO: extract
+        // TODO: extract all checks
         var glContext = cupSurface.getContext('webgl');
 
         if (!glContext) {
@@ -34,14 +28,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (!glContext) {
-            alert('Seems like your browser does not support WebGL. Come back when you update your browser!');
+            alert('Seems like your browser does not support WebGL. Come back later when you update your browser!');
             throw new Error('WebGL support is required!');
         }
 
-        window.modelCup1 = new Model(glContext, Storage.get('modelCup1'));
-        window.modelCup2 = new Model(glContext, Storage.get('modelCup2'));
+        // key must be same as select option value
+        var models = {
+            cup1: new Model(glContext, Storage.get('modelCup1')),
+            cup2: new Model(glContext, Storage.get('modelCup2'))
+        };
 
-        modelView = new ModelView(
+        var modelView = new ModelView(
             cupSurface,
             glContext,
             Storage.get('initialTexture'),
@@ -49,8 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
             Storage.get('vertexShader')
         );
 
-        modelView.setModel(window.modelCup1);
+        modelView.setModel(models.cup1);
         modelView.startRender();
+
+        // Panel for creating new elements on
+        var componentPanel = new ComponentsPanel(surface, modelView);
+        componentPanel.bindHandlers();
+
+        // Panel for 3D magic
+        var modelViewPanel = new ModelViewPanel(modelView, models);
+        modelViewPanel.bindHandlers();
     });
 
     resourcePreparer.startLoading();

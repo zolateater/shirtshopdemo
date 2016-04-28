@@ -100,7 +100,19 @@ CanvasSurface.prototype.renderElements = function () {
         this.elements.get(i).render();
 
         if (i == selectedIndex && ! this._isExportingRender) {
-            new CanvasUISelectedView(this.context).render(this.elements.get(i));
+
+            // We call it 'kostyl'
+            // Weird way to set color
+            var color = '#ffffff';
+            if (this.clearColor.toLowerCase() == '#ffffff') {
+                color = '#2e6da4';
+            }
+
+            new CanvasUISelectedView(this.context, {
+                // kinda feels like hard code
+                color: color,
+                size: 15
+            }).render(this.elements.get(i));
         }
     }
 };
