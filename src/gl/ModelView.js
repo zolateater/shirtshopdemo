@@ -11,9 +11,10 @@ function ModelView(canvas, glContext, initialTexture, vertexShader, fragmentShad
     this.canvas = canvas;
     this.gl = glContext;
 
-
     this.texture = initialTexture;
     this.initialize(vertexShader, fragmentShader);
+
+    this.camera = new Camera();
 
     this.setTexture(initialTexture);
 }
@@ -132,82 +133,87 @@ ModelView.prototype.startRender = function () {
     var gl = this.gl;
 
     // Матрицы - местоположение в шейдерах
-    var matWorldUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mWorld');
-    var matViewUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mView');
-    var matProjectionUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mProjection');
+    this.matWorldUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mWorld');
+    this.matViewUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mView');
+    this.matProjectionUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mProjection');
 
     // Сами матрицы
     var worldMatrix = new Float32Array(16);
-    var viewMatrix = new Float32Array(16);
     var projectionMatrix = new Float32Array(16);
     mat4.identity(worldMatrix);
-    // Позиция наблюдателя, куда он смотрит, плюс вектор верха
-    mat4.lookAt(viewMatrix, [0, 0, -10], [0, 0, 0], [0, 1, 0]);
+
     // Поле обзора (в радианах), viewport, closest plane, far plane
-    mat4.perspective(projectionMatrix, glMatrix.toRadian(30), this.canvas.width / this.canvas.height, 0.01, 100.0);
+    mat4.perspective(projectionMatrix, glMatrix.toRadian(30), this.canvas.width / this.canvas.height, 0.1, 1000.0);
 
     // Какую шейдерную программу используем
     gl.useProgram(this.shaderProgram);
 
     // Передаем в шейдер. TRUE - чтобы транспонировать
-    gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
-    gl.uniformMatrix4fv(matViewUniformLocation, gl.FALSE, viewMatrix);
-    gl.uniformMatrix4fv(matProjectionUniformLocation, gl.FALSE, projectionMatrix);
+    gl.uniformMatrix4fv(this.matWorldUniformLocation, gl.FALSE, worldMatrix);
+    gl.uniformMatrix4fv(this.matViewUniformLocation, gl.FALSE, this.camera.matrix);
+    gl.uniformMatrix4fv(this.matProjectionUniformLocation, gl.FALSE, projectionMatrix);
 
-    // Угол вращения
-    var angleX = 0;
-    var angleY = 0;
+    this.bindCanvasHandlers();
+
+    // Сберегаем вычислительные мощности
+    // Главный цикр рендера
+    requestAnimationFrame(this.loop.bind(this));
+};
+
+/**
+ * Render loop
+ */
+ModelView.prototype.loop = function ()
+{
+    var gl = this.gl;
+    // Обновляем переменную в шейдере
+    gl.uniformMatrix4fv(this.matViewUniformLocation, gl.FALSE, this.camera.matrix);
+
+    // Назначение текстуры
+    gl.bindTexture(gl.TEXTURE_2D, this.modelTexture);
+
+    // Активный слот текстуры
+    gl.activeTexture(gl.TEXTURE0);
+
+    // Цвет очистки
+    gl.clearColor(0.8, 0.9, 0.9 ,1.0);
+    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT );
+
+    gl.drawElements(
+        gl.TRIANGLES, // Как рисуем,
+        this.model.modelIndexes.length,
+        gl.UNSIGNED_SHORT, // Тип
+        0 // Сколько пропускам вершин
+    );
+    requestAnimationFrame(this.loop.bind(this));
+};
+
+
+ModelView.prototype.bindCanvasHandlers = function () {
+    var sensitivity = 15;
+
     var isMousePressed = false;
     var initialEvent = null;
-    // Это уже отсебятина пошла
+
+    var camera = this.camera;
+
     this.canvas.addEventListener('mousedown', function(e) {
         isMousePressed = true;
         initialEvent = e;
     });
+
     this.canvas.addEventListener('mouseup', function (e) {
         isMousePressed = false;
         initialEvent = null;
     });
+
     this.canvas.addEventListener('mousemove', function (e) {
         if (isMousePressed) {
             var diffX = initialEvent.clientX - e.clientX;
             var diffY = initialEvent.clientY - e.clientY;
             initialEvent = e;
-            angleY += - (diffX / 200);
-            angleX +=  (diffY / 200);
+
+            camera.move(diffX, diffY);
         }
     });
-
-    var self = this;
-
-    // Сберегаем вычислительные мощности
-    // Главный цикр рендера
-    var identityMatrix = new Float32Array(16);
-    mat4.identity(identityMatrix);
-
-    var loop = function () {
-        // Какую матрицу вокруг какой вращаем
-        mat4.rotate(worldMatrix, identityMatrix, angleX, [1, 0, 0]);
-        mat4.rotate(worldMatrix, worldMatrix, angleY, [0, 1, 0]);
-        // Обновляем переменную в шейдере
-        gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
-
-        // Назначение текстуры
-        gl.bindTexture(gl.TEXTURE_2D, self.modelTexture);
-
-        // Активный слот текстуры
-        gl.activeTexture(gl.TEXTURE0);
-
-        gl.clearColor(0.8, 0.9, 0.9 ,1.0);
-        gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT );
-
-        gl.drawElements(
-            gl.TRIANGLES, // Как рисуем,
-            self.model.modelIndexes.length,
-            gl.UNSIGNED_SHORT, // Тип
-            0 // Сколько пропускам вершин
-        );
-        requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
 };
