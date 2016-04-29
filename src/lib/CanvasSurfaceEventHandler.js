@@ -191,6 +191,7 @@ CanvasSurfaceEventHandler.prototype.handleMouseMove = function (e) {
 
     // Quick hack
     if (typeof TouchEvent != "undefined" && e instanceof TouchEvent) {
+        e.preventDefault();
         e = e.touches[0];
     }
 

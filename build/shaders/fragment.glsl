@@ -8,7 +8,7 @@ void main ()
 {
     vec3 ambientLightIntensity = vec3(0.4, 0.4, 0.4);
     vec3 sunLightIntensity = vec3(0.8, 0.8, 0.8);
-    vec3 sunLightDirection = normalize(vec3(1.0, -4.0, 3.0));
+    vec3 sunLightDirection = normalize(vec3(2.0, -1.0, 1.0));
 
     vec4 texel = texture2D(texture, fragTexCoord);
     vec3 lightIntensity = ambientLightIntensity +

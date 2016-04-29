@@ -10,7 +10,7 @@ function Camera()
     // Initial angle and distance
     this.angleTheta = 30;
     this.angleFi = 0;
-    this.distance = 20;
+    this.distance = 15;
 
     this.minAngleTheta = 10;
     this.maxAngleTheta = 170;

@@ -176,7 +176,7 @@ ModelView.prototype.loop = function ()
     gl.activeTexture(gl.TEXTURE0);
 
     // Цвет очистки
-    gl.clearColor(0.8, 0.9, 0.9 ,1.0);
+    gl.clearColor(0.9, 0.9, 0.9, 1.0);
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT );
 
     gl.drawElements(
@@ -197,17 +197,27 @@ ModelView.prototype.bindCanvasHandlers = function () {
 
     var camera = this.camera;
 
-    this.canvas.addEventListener('mousedown', function(e) {
+    var handleMouseDown = function(e) {
+        if (typeof TouchEvent != "undefined" && e instanceof TouchEvent) {
+            e = e.touches[0];
+        }
+
         isMousePressed = true;
         initialEvent = e;
-    });
+    };
 
-    this.canvas.addEventListener('mouseup', function (e) {
+    var handleMouseUp =  function (e) {
         isMousePressed = false;
         initialEvent = null;
-    });
+    };
 
-    this.canvas.addEventListener('mousemove', function (e) {
+    var handleMouseMove = function (e) {
+        // another quick hack
+        if (typeof TouchEvent != "undefined" && e instanceof TouchEvent) {
+            e.preventDefault();
+            e = e.touches[0];
+        }
+
         if (isMousePressed) {
             var diffX = initialEvent.clientX - e.clientX;
             var diffY = initialEvent.clientY - e.clientY;
@@ -215,5 +225,14 @@ ModelView.prototype.bindCanvasHandlers = function () {
 
             camera.move(diffX, diffY);
         }
-    });
+    };
+
+    this.canvas.addEventListener('mousedown', handleMouseDown);
+    this.canvas.addEventListener('touchstart', handleMouseDown);
+
+    this.canvas.addEventListener('mouseup', handleMouseUp);
+    this.canvas.addEventListener('touchend', handleMouseUp);
+
+    this.canvas.addEventListener('mousemove', handleMouseMove);
+    this.canvas.addEventListener('touchmove', handleMouseMove);
 };
