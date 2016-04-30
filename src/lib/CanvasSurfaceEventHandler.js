@@ -188,10 +188,10 @@ CanvasSurfaceEventHandler.prototype.toLocalCoordinates = function (clientX, clie
  * @param e
  */
 CanvasSurfaceEventHandler.prototype.handleMouseMove = function (e) {
+    var originalEvent = e;
 
     // Quick hack
     if (typeof TouchEvent != "undefined" && e instanceof TouchEvent) {
-        e.preventDefault();
         e = e.touches[0];
     }
 
@@ -205,6 +205,15 @@ CanvasSurfaceEventHandler.prototype.handleMouseMove = function (e) {
         this.handleMouseMoveWithoutMouseDown(elementHoverIndex, selectedIndex, localCoordinates);
         return;
     }
+
+    // This is moving en element.
+    // Mobile devices will try to scroll down,
+    // and we don't wont that if we are resizing
+    // or moving
+    if (this.isMovingClick || this.isResizingClick) {
+        originalEvent.preventDefault();
+    }
+
 
     var selectedElement = this.surface.elements.getSelectedElement();
 
@@ -294,7 +303,7 @@ CanvasSurfaceEventHandler.prototype.handleMouseMoveWithoutMouseDown = function (
  * @param y
  */
 CanvasSurfaceEventHandler.prototype.isResizePossible = function(element, x, y) {
-    var dragIconSize = 10;
+    var dragIconSize = 20;
 
     var tempElementData = {
         position: new Position(
