@@ -9,8 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var propertiesPanel = new PropertiesPanel(surface);
     propertiesPanel.bindHandlers();
 
-    var cupSurface = document.getElementById('cupSurface');
+    var cupCanvas = document.getElementById('cupCanvas');
     var loader = new ResourceLoader();
+
+    /**
+     * @type {ModelView}
+     */
+    var modelView;
 
     var resourcePreparer = new ResourcePreparer(loader, [
         {key: 'modelCup1', src: '/models/cup1.json', type: 'json'},
@@ -21,10 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
     ], function () {
 
         // TODO: extract all checks
-        var glContext = cupSurface.getContext('webgl');
+        var glContext = cupCanvas.getContext('webgl');
 
         if (!glContext) {
-            glContext = cupSurface.getContext('experimental-webgl')
+            glContext = cupCanvas.getContext('experimental-webgl')
         }
 
         if (!glContext) {
@@ -38,14 +43,15 @@ document.addEventListener('DOMContentLoaded', function() {
             cup2: new Model(glContext, Storage.get('modelCup2'))
         };
 
-        var modelView = new ModelView(
-            cupSurface,
+        modelView = new ModelView(
+            cupCanvas,
             glContext,
             Storage.get('initialTexture'),
             Storage.get('fragmentShader'),
             Storage.get('vertexShader')
         );
 
+        // Setting initial model cup
         modelView.setModel(models.cup1);
         modelView.startRender();
 
@@ -57,6 +63,33 @@ document.addEventListener('DOMContentLoaded', function() {
         var modelViewPanel = new ModelViewPanel(modelView, models);
         modelViewPanel.bindHandlers();
     });
+
+    var drawingContainer = document.getElementById('drawingContainer');
+    var modelViewContainer = document.getElementById('cupCanvasContainer');
+
+    var fitCanvasSize = function () {
+        // Changing size of the drawing
+        var drawingCanvasRatio = surface.canvas.width / surface.canvas.height;
+        var newWidth = drawingContainer.offsetWidth;
+        var newHeight = newWidth / drawingCanvasRatio;
+
+        surface.canvas.width = newWidth;
+        surface.canvas.height = newHeight;
+        surface.render();
+
+        var modelViewRatio = cupCanvas.width / cupCanvas.height;
+        var newWidthModelView = modelViewContainer.offsetWidth;
+        cupCanvas.width = newWidthModelView;
+        cupCanvas.height = newWidthModelView / modelViewRatio;
+        
+        if (modelView) {
+            modelView.updateViewport();
+        }
+    };
+    fitCanvasSize();
+
+    // Listen for resize event to resize canvas
+    window.addEventListener('resize', fitCanvasSize);
 
     resourcePreparer.startLoading();
 });

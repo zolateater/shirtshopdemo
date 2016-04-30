@@ -1,6 +1,6 @@
 /**
  * @param canvas
- * @param {CanvasRenderingContext2D} glContext
+ * @param {WebGLRenderingContext} glContext
  * @param {Image} initialTexture
  * @param {string} vertexShader
  * @param {string} fragmentShader
@@ -138,26 +138,35 @@ ModelView.prototype.startRender = function () {
     this.matProjectionUniformLocation = gl.getUniformLocation(this.shaderProgram, 'mProjection');
 
     // Сами матрицы
-    var worldMatrix = new Float32Array(16);
-    var projectionMatrix = new Float32Array(16);
-    mat4.identity(worldMatrix);
-
-    // Поле обзора (в радианах), viewport, closest plane, far plane
-    mat4.perspective(projectionMatrix, glMatrix.toRadian(30), this.canvas.width / this.canvas.height, 0.1, 1000.0);
-
+    this.worldMatrix = new Float32Array(16);
+    this.projectionMatrix = new Float32Array(16);
+    mat4.identity(this.worldMatrix);
+    mat4.perspective(this.projectionMatrix, glMatrix.toRadian(30), this.canvas.width / this.canvas.height, 0.1, 1000.0);
+    
     // Какую шейдерную программу используем
     gl.useProgram(this.shaderProgram);
 
+    // Поле обзора (в радианах), closest plane, far plane
+    this.gl.uniformMatrix4fv(this.matWorldUniformLocation, this.gl.FALSE, this.worldMatrix);
+
     // Передаем в шейдер. TRUE - чтобы транспонировать
-    gl.uniformMatrix4fv(this.matWorldUniformLocation, gl.FALSE, worldMatrix);
+    gl.uniformMatrix4fv(this.matWorldUniformLocation, gl.FALSE, this.worldMatrix);
     gl.uniformMatrix4fv(this.matViewUniformLocation, gl.FALSE, this.camera.matrix);
-    gl.uniformMatrix4fv(this.matProjectionUniformLocation, gl.FALSE, projectionMatrix);
+    gl.uniformMatrix4fv(this.matProjectionUniformLocation, gl.FALSE, this.projectionMatrix);
 
     this.bindCanvasHandlers();
 
     // Сберегаем вычислительные мощности
     // Главный цикр рендера
-    requestAnimationFrame(this.loop.bind(this));
+    this.animationRequest = requestAnimationFrame(this.loop.bind(this));
+};
+
+
+/**
+ * Updates render viewport
+ */
+ModelView.prototype.updateViewport = function () {
+    this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
 };
 
 /**
@@ -190,8 +199,6 @@ ModelView.prototype.loop = function ()
 
 
 ModelView.prototype.bindCanvasHandlers = function () {
-    var sensitivity = 15;
-
     var isMousePressed = false;
     var initialEvent = null;
 
