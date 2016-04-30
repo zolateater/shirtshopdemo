@@ -18,12 +18,13 @@ body {
 }
 
 .image-bg-fluid-height {
-    background: url('http://lorempixel.com/g/1920/500/') no-repeat center center scroll;
+    background: url('/img/back.jpg') no-repeat top center scroll;
+    background-size: 100% auto;
     padding: 100px 0;
 }
 
 .image-bg-fixed-height {
-    background: url('http://lorempixel.com/g/1920/500/') no-repeat center center scroll;
+    background: url('/img/back.jpg') no-repeat center center scroll;
     height: 450px;
 }
 
