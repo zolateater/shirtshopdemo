@@ -8,7 +8,7 @@ var browserSync = require('browser-sync').create();
 var sourceMaps = require('gulp-sourcemaps');
 
 // set true for minified output
-const isDevelopment = true;
+const isDevelopment = false;
 
 // build task
 gulp.task('build', function () {
