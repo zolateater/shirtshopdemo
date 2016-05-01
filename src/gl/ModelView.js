@@ -162,7 +162,7 @@ ModelView.prototype.startRender = function ()
 
     // Сберегаем вычислительные мощности
     // Главный цикр рендера
-    requestAnimationFrame(this.loop.bind(this));
+    this.animationRequest = requestAnimationFrame(this.loop.bind(this));
 };
 
 
@@ -260,21 +260,39 @@ ModelView.prototype.bindCanvasHandlers = function () {
     this.canvas.addEventListener('touchmove', handleMouseMove);
 };
 
-
+/**
+ * Rendering the cup into the image
+ *
+ * @return {Image}
+ */
 ModelView.prototype.makePreviewImage = function ()
 {
+    cancelAnimationFrame(this.animationRequest);
+
     var oldColor = this.clearColor;
-    this.clearColor = {
-        r: 0.0,
-        g: 0.0,
-        b: 0.0,
-        a: 0.0
+    this.clearColor = {r: 0.0, g: 0.0, b: 0.0, a: 0.0 };
+
+    var oldCoordinates = {
+        angleFi: this.camera.angleFi,
+        angleTheta: this.camera.angleTheta,
+        distance: this.camera.distance
     };
+
+    this.camera.setAngle(-98, 77);
+    this.camera.setDistance(20);
+    this.camera.updateMatrix();
+
     this.drawScene();
     this.clearColor = oldColor;
 
     var img = new Image();
     img.src = this.canvas.toDataURL();
+
+    this.camera.setAngle(oldCoordinates.angleFi, oldCoordinates.angleTheta);
+    this.camera.setDistance(oldCoordinates.distance);
+    this.camera.updateMatrix();
+
+    this.animationRequest = requestAnimationFrame(this.loop.bind(this));
 
     return img;
 };

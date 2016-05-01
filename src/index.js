@@ -15,7 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * @type {ModelView}
      */
-    var modelView;
+    var modelView = null;
+
+    /**
+     * @type {PreviewPanel}
+     */
+    var previewPanel = null;
 
     var resourcePreparer = new ResourcePreparer(loader, [
         {key: 'modelCup1', src: '/models/cup1.json', type: 'json'},
@@ -23,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
         {key: 'vertexShader', src: '/shaders/fragment.glsl', type: 'text'},
         {key: 'fragmentShader', src: '/shaders/vertex.glsl', type: 'text'},
         {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'},
-        {key: 'previewMan', src: '/img/previewMan.jpg', type: 'image'}
+        {key: 'previewMan', src: '/img/previewMan.jpg', type: 'image'},
+        {key: 'previewManFront', src: '/img/previewManFront.png', type: 'image'}
     ], function () {
 
         // TODO: extract all checks
@@ -68,13 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
         modelViewPanel.bindHandlers();
 
         // Panel for preview
-        var previewPanel = new PreviewPanel(modelView);
+        previewPanel = new PreviewPanel(modelView);
         previewPanel.bindHandlers();
     });
 
     var drawingContainer = document.getElementById('drawingContainer');
     var modelViewContainer = document.getElementById('cupCanvasContainer');
-
+    var panelPreviewCanvas = document.getElementById('previewCanvas');
+    
     var fitCanvasSize = function () {
         // Changing size of the drawing
         var drawingCanvasRatio = surface.canvas.width / surface.canvas.height;
@@ -87,15 +94,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var modelViewRatio = cupCanvas.width / cupCanvas.height;
         var newWidthModelView = modelViewContainer.offsetWidth;
+        var newHeightModelView = newWidthModelView / modelViewRatio;
         cupCanvas.width = newWidthModelView;
-        cupCanvas.height = newWidthModelView / modelViewRatio;
-        
+        cupCanvas.height = newHeightModelView;
+
+        panelPreviewCanvas.width = newWidthModelView;
+        panelPreviewCanvas.height = newHeightModelView;
+
         if (modelView) {
             modelView.updateViewport();
+        }
+
+        if (previewPanel) {
+            previewPanel.requestImage();
         }
     };
 
     fitCanvasSize();
+
+    window.addEventListener('resize', fitCanvasSize);
 
     resourcePreparer.startLoading();
 });

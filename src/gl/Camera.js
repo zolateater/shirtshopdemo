@@ -89,6 +89,17 @@ Camera.prototype.zoomOut = function () {
 Camera.prototype.setAngle = function (angleFi, angleTheta) {
     this.angleFi = angleFi;
     this.angleTheta = angleTheta;
+    this.position = this.getNewPosition();
+};
+
+/**
+ * Sets camera distance
+ *
+ * @param {Number} distance
+ */
+Camera.prototype.setDistance = function (distance) {
+    this.distance = distance;
+    this.position = this.getNewPosition();
 };
 
 /**

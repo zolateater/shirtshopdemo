@@ -81,8 +81,8 @@
                 <div class="col-md-3 col-xs-6">
                     <div class="form-group">
                         <div class="pull-right">
-                            <button class="btn btn-primary" id="btnShowPreview">
-                                Превью
+                            <button class="btn btn-primary" id="btnTogglePreview">
+                                Показать/скрыть превью
                             </button>
                         </div>
                         <div class="clearfix"></div>
@@ -94,19 +94,9 @@
                     <div class="form-group" id="cupCanvasContainer">
                         <!-- Preview panel -->
                         <div id="previewPanel">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="pull-right">
-                                        <button class="btn btn-primary" id="btnHidePreview">
-                                            Скрыть
-                                        </button>
-                                    </div>
-                                    <!-- Canvas for preview -->
-                                    <canvas id="previewCanvas" width="400" height="400">
+                            <canvas id="previewCanvas" width="600" height="600">
 
-                                    </canvas>
-                                </div>
-                            </div>
+                            </canvas>
                         </div>
                         <!-- 3D Magic canvas -->
                         <canvas id="cupCanvas" width="1170" height="600">
