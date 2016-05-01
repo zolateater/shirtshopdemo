@@ -28,6 +28,7 @@ ComponentsPanel.prototype.bindHandlers = function () {
     // Update current texture button
     this._btnUpdateTexture.addEventListener('click', function () {
         self._modelView.setTexture(self._surface.toImage());
+        self._modelView.drawScene();
     });
 
     // On click we set current value to empty and the reason

@@ -159,10 +159,10 @@ ModelView.prototype.startRender = function ()
     gl.uniformMatrix4fv(this.matProjectionUniformLocation, gl.FALSE, this.projectionMatrix);
 
     this.bindCanvasHandlers();
+    this.drawScene();
 
-    // Сберегаем вычислительные мощности
     // Главный цикр рендера
-    this.animationRequest = requestAnimationFrame(this.loop.bind(this));
+    // this.animationRequest = requestAnimationFrame(this.loop.bind(this));
 };
 
 
@@ -214,6 +214,7 @@ ModelView.prototype.drawScene = function () {
  * Binds canvas event handlers
  */
 ModelView.prototype.bindCanvasHandlers = function () {
+    var self = this;
     var isMousePressed = false;
     var initialEvent = null;
 
@@ -247,6 +248,7 @@ ModelView.prototype.bindCanvasHandlers = function () {
             initialEvent = e;
 
             camera.move(diffX, diffY);
+            self.drawScene();
         }
     };
 
@@ -292,7 +294,8 @@ ModelView.prototype.makePreviewImage = function ()
     this.camera.setDistance(oldCoordinates.distance);
     this.camera.updateMatrix();
 
-    this.animationRequest = requestAnimationFrame(this.loop.bind(this));
+    this.drawScene();
+    // this.animationRequest = requestAnimationFrame(this.loop.bind(this));
 
     return img;
 };

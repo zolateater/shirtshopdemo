@@ -26,14 +26,17 @@ ModelViewPanel.prototype.bindHandlers = function ()
     // Zooming buttons
     this._btnZoomIn.addEventListener('click', function () {
         self._modelView.camera.zoomIn();
+        self._modelView.drawScene();
     });
     this._btnZoomOut.addEventListener('click', function () {
         self._modelView.camera.zoomOut();
+        self._modelView.drawScene();
     });
 
     // Changing model type
     this._cupTypeSelect.addEventListener('change', function () {
         var selected = this.value;
         self._modelView.setModel(self._models[selected]);
+        self._modelView.drawScene();
     });
 };
