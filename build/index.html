@@ -94,11 +94,21 @@
                     <div class="form-group" id="cupCanvasContainer">
                         <!-- Preview panel -->
                         <div id="previewPanel">
-                            <button class="btn btn-primary" id="btnHidePreview">
-                                Скрыть
-                            </button>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pull-right">
+                                        <button class="btn btn-primary" id="btnHidePreview">
+                                            Скрыть
+                                        </button>
+                                    </div>
+                                    <!-- Canvas for preview -->
+                                    <canvas id="previewCanvas" width="400" height="400">
+
+                                    </canvas>
+                                </div>
+                            </div>
                         </div>
-                        <!-- 3D Magic container -->
+                        <!-- 3D Magic canvas -->
                         <canvas id="cupCanvas" width="1170" height="600">
 
                         </canvas>

@@ -275,7 +275,6 @@ ModelView.prototype.makePreviewImage = function ()
 
     var img = new Image();
     img.src = this.canvas.toDataURL();
-    document.body.appendChild(img);
 
     return img;
 };

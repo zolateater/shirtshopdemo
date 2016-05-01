@@ -60,7 +60,7 @@
     overflow: hidden;
 }
 #previewPanel {
-    background-color: indianred;
+    background-color: #fff;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -71,7 +71,15 @@
     -ms-transition: all 1s;
     -o-transition: all 1s;
     transition: all 1s;
+    border: solid 1px rgba(0,0,0,.08);
+    overflow: hidden;
 }
+#previewCanvas {
+    display: block;
+    margin: auto;
+    margin-top: 5px;
+}
+
 #previewPanel.active {
     right: 0;
 }

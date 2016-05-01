@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
         {key: 'modelCup2', src: '/models/cup2.json', type: 'json'},
         {key: 'vertexShader', src: '/shaders/fragment.glsl', type: 'text'},
         {key: 'fragmentShader', src: '/shaders/vertex.glsl', type: 'text'},
-        {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'}
+        {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'},
+        {key: 'previewMan', src: '/img/previewMan.jpg', type: 'image'}
     ], function () {
 
         // TODO: extract all checks
@@ -65,6 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Panel for 3D magic
         var modelViewPanel = new ModelViewPanel(modelView, models);
         modelViewPanel.bindHandlers();
+
+        // Panel for preview
+        var previewPanel = new PreviewPanel(modelView);
+        previewPanel.bindHandlers();
     });
 
     var drawingContainer = document.getElementById('drawingContainer');
@@ -89,18 +94,8 @@ document.addEventListener('DOMContentLoaded', function() {
             modelView.updateViewport();
         }
     };
+
     fitCanvasSize();
-
-    // Listen for resize event to resize canvas
-    window.addEventListener('resize', fitCanvasSize);
-
-    // Preview when clicked
-    var btnPreview = document.getElementById('btnShowPreview');
-    btnPreview.addEventListener('click', function () {
-        if (modelView) {
-            modelView.makePreviewImage();
-        }
-    });
 
     resourcePreparer.startLoading();
 });
