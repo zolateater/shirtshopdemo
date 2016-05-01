@@ -2367,13 +2367,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var previewPanel = null;
 
     var resourcePreparer = new ResourcePreparer(loader, [
-        {key: 'modelCup1', src: '/models/cup1.json', type: 'json'},
-        {key: 'modelCup2', src: '/models/cup2.json', type: 'json'},
-        {key: 'vertexShader', src: '/shaders/fragment.glsl', type: 'text'},
-        {key: 'fragmentShader', src: '/shaders/vertex.glsl', type: 'text'},
-        {key: 'initialTexture', src: '/img/logoGrey.jpg', type: 'image'},
-        {key: 'previewMan', src: '/img/previewMan.jpg', type: 'image'},
-        {key: 'previewManFront', src: '/img/previewManFront.png', type: 'image'}
+        {key: 'modelCup1', src: '/shirtshopdemo/models/cup1.json', type: 'json'},
+        {key: 'modelCup2', src: '/shirtshopdemo/models/cup2.json', type: 'json'},
+        {key: 'vertexShader', src: '/shirtshopdemo/shaders/fragment.glsl', type: 'text'},
+        {key: 'fragmentShader', src: '/shirtshopdemo/shaders/vertex.glsl', type: 'text'},
+        {key: 'initialTexture', src: '/shirtshopdemo/img/logoGrey.jpg', type: 'image'},
+        {key: 'previewMan', src: '/shirtshopdemo/img/previewMan.jpg', type: 'image'},
+        {key: 'previewManFront', src: '/shirtshopdemo/img/previewManFront.png', type: 'image'}
     ], function () {
 
         // TODO: extract all checks
