@@ -55,3 +55,23 @@
 .form-inline select.form-control {
     width: 150px;
 }
+#cupCanvasContainer {
+    position: relative;
+    overflow: hidden;
+}
+#previewPanel {
+    background-color: indianred;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 100%;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -ms-transition: all 1s;
+    -o-transition: all 1s;
+    transition: all 1s;
+}
+#previewPanel.active {
+    right: 0;
+}

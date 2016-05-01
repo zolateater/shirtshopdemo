@@ -26,10 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
     ], function () {
 
         // TODO: extract all checks
-        var glContext = cupCanvas.getContext('webgl');
-
+        var options = {
+            preserveDrawingBuffer: true
+        };
+        var glContext = cupCanvas.getContext('webgl', options);
+        
         if (!glContext) {
-            glContext = cupCanvas.getContext('experimental-webgl')
+            glContext = cupCanvas.getContext('experimental-webgl', options);
         }
 
         if (!glContext) {
@@ -90,6 +93,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Listen for resize event to resize canvas
     window.addEventListener('resize', fitCanvasSize);
+
+    // Preview when clicked
+    var btnPreview = document.getElementById('btnShowPreview');
+    btnPreview.addEventListener('click', function () {
+        if (modelView) {
+            modelView.makePreviewImage();
+        }
+    });
 
     resourcePreparer.startLoading();
 });

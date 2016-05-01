@@ -6,12 +6,13 @@
  * @param {string} fragmentShader
  * @constructor
  */
-function ModelView(canvas, glContext, initialTexture, vertexShader, fragmentShader) {
-
+function ModelView(canvas, glContext, initialTexture, vertexShader, fragmentShader)
+{
     this.canvas = canvas;
     this.gl = glContext;
 
     this.texture = initialTexture;
+    this.clearColor = { r: 0.9, g: 0.9, b: 0.9, a: 1.0 };
     this.initialize(vertexShader, fragmentShader);
 
     this.camera = new Camera();
@@ -32,7 +33,7 @@ ModelView.prototype.initialize = function (vertexShader, fragmentShader)
     gl.enable(gl.DEPTH_TEST);
 
     // Задаем цвет очистки
-    gl.clearColor(0.8, 0.9, 0.9 , 0.0);
+    gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b , this.clearColor.a);
     // Очистка - что очищаем - буфер цвета, или же буфер глубины
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -45,7 +46,8 @@ ModelView.prototype.initialize = function (vertexShader, fragmentShader)
  * 
  * @param {Image} image
  */
-ModelView.prototype.setTexture = function (image) {
+ModelView.prototype.setTexture = function (image)
+{
 
     this.texture = image;
     var gl = this.gl;
@@ -79,7 +81,8 @@ ModelView.prototype.setTexture = function (image) {
  *
  * @param {Model} model
  */
-ModelView.prototype.setModel = function (model) {
+ModelView.prototype.setModel = function (model)
+{
 
     this.model = model;
     var program = this.shaderProgram;
@@ -129,7 +132,8 @@ ModelView.prototype.setModel = function (model) {
 
 };
 
-ModelView.prototype.startRender = function () {
+ModelView.prototype.startRender = function ()
+{
     var gl = this.gl;
 
     // Матрицы - местоположение в шейдерах
@@ -158,14 +162,15 @@ ModelView.prototype.startRender = function () {
 
     // Сберегаем вычислительные мощности
     // Главный цикр рендера
-    this.animationRequest = requestAnimationFrame(this.loop.bind(this));
+    requestAnimationFrame(this.loop.bind(this));
 };
 
 
 /**
  * Updates render viewport
  */
-ModelView.prototype.updateViewport = function () {
+ModelView.prototype.updateViewport = function ()
+{
     this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
 };
 
@@ -174,6 +179,15 @@ ModelView.prototype.updateViewport = function () {
  */
 ModelView.prototype.loop = function ()
 {
+    this.drawScene();
+    requestAnimationFrame(this.loop.bind(this));
+};
+
+/**
+ * Draws scene.
+ * Method where all of the 3D magic happens
+ */
+ModelView.prototype.drawScene = function () {
     var gl = this.gl;
     // Обновляем переменную в шейдере
     gl.uniformMatrix4fv(this.matViewUniformLocation, gl.FALSE, this.camera.matrix);
@@ -185,7 +199,7 @@ ModelView.prototype.loop = function ()
     gl.activeTexture(gl.TEXTURE0);
 
     // Цвет очистки
-    gl.clearColor(0.9, 0.9, 0.9, 1.0);
+    gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, this.clearColor.a);
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT );
 
     gl.drawElements(
@@ -194,10 +208,11 @@ ModelView.prototype.loop = function ()
         gl.UNSIGNED_SHORT, // Тип
         0 // Сколько пропускам вершин
     );
-    requestAnimationFrame(this.loop.bind(this));
 };
 
-
+/**
+ * Binds canvas event handlers
+ */
 ModelView.prototype.bindCanvasHandlers = function () {
     var isMousePressed = false;
     var initialEvent = null;
@@ -221,6 +236,7 @@ ModelView.prototype.bindCanvasHandlers = function () {
     var handleMouseMove = function (e) {
         // another quick hack
         if (typeof TouchEvent != "undefined" && e instanceof TouchEvent) {
+            // Don't want to scroll
             e.preventDefault();
             e = e.touches[0];
         }
@@ -242,4 +258,24 @@ ModelView.prototype.bindCanvasHandlers = function () {
 
     this.canvas.addEventListener('mousemove', handleMouseMove);
     this.canvas.addEventListener('touchmove', handleMouseMove);
+};
+
+
+ModelView.prototype.makePreviewImage = function ()
+{
+    var oldColor = this.clearColor;
+    this.clearColor = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+    this.drawScene();
+    this.clearColor = oldColor;
+
+    var img = new Image();
+    img.src = this.canvas.toDataURL();
+    document.body.appendChild(img);
+
+    return img;
 };

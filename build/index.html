@@ -81,7 +81,7 @@
                 <div class="col-md-3 col-xs-6">
                     <div class="form-group">
                         <div class="pull-right">
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" id="btnShowPreview">
                                 Превью
                             </button>
                         </div>
@@ -92,6 +92,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" id="cupCanvasContainer">
+                        <!-- Preview panel -->
+                        <div id="previewPanel">
+                            <button class="btn btn-primary" id="btnHidePreview">
+                                Скрыть
+                            </button>
+                        </div>
+                        <!-- 3D Magic container -->
                         <canvas id="cupCanvas" width="1170" height="600">
 
                         </canvas>
